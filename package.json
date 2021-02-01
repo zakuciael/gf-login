@@ -1,5 +1,5 @@
 {
-  "name": "gf-login",
+  "name": "@banzar-team/gf-login",
   "version": "1.0.0",
   "description": "A node.js library for authenticating to GameFail's servers.",
   "main": "dist/index.js",
