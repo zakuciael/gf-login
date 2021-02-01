@@ -1,0 +1,23 @@
+# Basic folders
+node_modules/
+.vscode/*
+.idea/*
+
+# Compiled code
+buiild/
+dist/
+out/
+*.js
+
+# Logs
+logs/
+log/
+*.log
+
+# Excludes
+!.eslintrc.js
+!.prettierrc.js
+!.idea/copyright/
+!.vscode/tasks.json
+!.vscode/launch.json
+!.run/

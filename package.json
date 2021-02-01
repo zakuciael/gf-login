@@ -1,0 +1,33 @@
+{
+  "name": "gf-login",
+  "version": "1.0.0",
+  "description": "A node.js library for authenticating to GameFail's servers.",
+  "main": "dist/index.js",
+  "repository": "https://github.com/banzar-team/gf-login.git",
+  "author": "Krzysztof Saczuk <zakuciael@outlook.com>",
+  "license": "UNLICENSED",
+  "private": false,
+  "engines": {
+    "node": ">=12.20.1"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint src/**/*.ts",
+    "prepublish": "yarn lint && yarn build"
+  },
+  "devDependencies": {
+    "@types/node": "^14.14.13",
+    "@typescript-eslint/eslint-plugin": "^4.9.1",
+    "@typescript-eslint/parser": "^4.9.1",
+    "eslint": "^7.15.0",
+    "eslint-config-prettier": "^7.0.0",
+    "eslint-plugin-prettier": "^3.2.0",
+    "prettier": "^2.2.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
+  }
+}
