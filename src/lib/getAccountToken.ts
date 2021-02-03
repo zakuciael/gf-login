@@ -1,4 +1,4 @@
-import { CaptchaRequiredError, InvalidResponseError, UnauthorizedError } from "./errors";
+import { CaptchaRequiredError, ForbiddenError, InvalidResponseError } from "./errors";
 import { LoginCaptcha, loginMethod, solveCaptcha } from "@banzar-team/ez-captcha";
 import fetch from "node-fetch";
 
@@ -43,7 +43,7 @@ export const getAccountToken = (
             const challengeIdHeader = res.headers.get("gf-challenge-id");
 
             if (res.ok) return res.json();
-            else if (res.status === 403) throw new UnauthorizedError();
+            else if (res.status === 403) throw new ForbiddenError();
             else if (res.status === 409 && challengeIdHeader) {
                 const challengeId = challengeIdHeader.split(";")[0];
                 if (!autoCaptcha) throw new CaptchaRequiredError(challengeId);
