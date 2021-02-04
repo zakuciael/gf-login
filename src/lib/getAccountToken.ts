@@ -31,10 +31,13 @@ export const getAccountToken = (
 
     return fetch(`https://spark.gameforge.com/api/v1/auth/sessions`, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "TNT-Installation-Id": installationID,
-        },
+        headers: Object.assign(
+            {
+                "Content-Type": "application/json",
+                "TNT-Installation-Id": installationID,
+            },
+            options.challengeId ? { "gf-challenge-id": options.challengeId } : undefined
+        ),
         body: JSON.stringify({
             email,
             password,
@@ -59,6 +62,7 @@ export const getAccountToken = (
                 if (!captchaResponse.solved) throw new CaptchaRequiredError(captchaResponse.id);
                 return getAccountToken(email, password, installationID, {
                     autoCaptcha: false,
+                    challengeId: captchaResponse.id,
                 });
             } else if (!res.ok) throw new InvalidResponseError(res.status, res.statusText);
         })
