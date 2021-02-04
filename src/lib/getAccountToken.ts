@@ -1,5 +1,6 @@
 import { CaptchaRequiredError, ForbiddenError, InvalidResponseError } from "./errors";
 import { LoginCaptcha, loginMethod, solveCaptcha } from "@banzar-team/ez-captcha";
+import { GetAccountTokenOptions } from "../types/GetAccountTokenOptions";
 import fetch from "node-fetch";
 
 const generateCaptchaLoginMethod = (
@@ -8,7 +9,7 @@ const generateCaptchaLoginMethod = (
     installationID: string
 ): loginMethod => {
     return (): Promise<LoginCaptcha> => {
-        return getAccountToken(email, password, installationID, false)
+        return getAccountToken(email, password, installationID, { autoCaptcha: false })
             .then(() => ({
                 requireCaptcha: false,
             }))
@@ -24,9 +25,10 @@ export const getAccountToken = (
     email: string,
     password: string,
     installationID: string,
-    autoCaptcha = true,
-    maxCaptchaAttempts?: number
+    opts?: GetAccountTokenOptions
 ): Promise<string> => {
+    const options: GetAccountTokenOptions = Object.assign({ autoCaptcha: true }, opts);
+
     return fetch(`https://spark.gameforge.com/api/v1/auth/sessions`, {
         method: "POST",
         headers: {
@@ -46,16 +48,18 @@ export const getAccountToken = (
             else if (res.status === 403) throw new ForbiddenError();
             else if (res.status === 409 && challengeIdHeader) {
                 const challengeId = challengeIdHeader.split(";")[0];
-                if (!autoCaptcha) throw new CaptchaRequiredError(challengeId);
+                if (!options.autoCaptcha) throw new CaptchaRequiredError(challengeId);
 
                 const captchaResponse = await solveCaptcha(
                     challengeId,
                     generateCaptchaLoginMethod(email, password, installationID),
-                    maxCaptchaAttempts
+                    options.maxCaptchaAttempts
                 );
 
                 if (!captchaResponse.solved) throw new CaptchaRequiredError(captchaResponse.id);
-                return getAccountToken(email, password, installationID, false);
+                return getAccountToken(email, password, installationID, {
+                    autoCaptcha: false,
+                });
             } else if (!res.ok) throw new InvalidResponseError(res.status, res.statusText);
         })
         .then((data) => {
