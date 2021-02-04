@@ -1,4 +1,4 @@
-import { InvalidResponseError, UnauthorizedError } from "./errors";
+import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./errors";
 import { GameAccount, RawGameAccount } from "../types/GameAccount";
 import fetch from "node-fetch";
 
@@ -15,7 +15,8 @@ export const getGameAccounts = (
     })
         .then((res) => {
             if (res.ok) return res.json();
-            else if (res.status === 403) throw new UnauthorizedError();
+            else if (res.status === 401) throw new UnauthorizedError();
+            else if (res.status === 403) throw new ForbiddenError();
             else throw new InvalidResponseError(res.status, res.statusText);
         })
         .then((data: { [key: string]: RawGameAccount }) =>
