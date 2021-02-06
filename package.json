@@ -20,6 +20,7 @@
     "prepublish": "yarn lint && yarn build"
   },
   "devDependencies": {
+    "@types/luxon": "^1.25.1",
     "@types/node": "^14.14.13",
     "@types/node-fetch": "^2.5.8",
     "@types/uuid": "^8.3.0",
@@ -35,6 +36,7 @@
   "dependencies": {
     "@banzar-team/ez-captcha": "^1.0.4",
     "cfv": "^1.1.0",
+    "luxon": "^1.25.0",
     "node-fetch": "^2.6.1",
     "uuid": "^8.3.2"
   }
