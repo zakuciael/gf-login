@@ -29,9 +29,14 @@ export interface RawGameAccount {
     wallet: { currencies: RawCurrency[] };
 }
 
+export interface GameInfo {
+    id: string;
+    name: string;
+}
+
 export interface GameAccount {
     id: string;
     accountName: string;
     usernames: string[];
-    game: string;
+    game: GameInfo;
 }

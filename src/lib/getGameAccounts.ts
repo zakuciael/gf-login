@@ -24,7 +24,10 @@ export const getGameAccounts = (
                 id: acc.id,
                 accountName: acc.displayName,
                 usernames: acc.usernames,
-                game: acc.guls.game,
+                game: {
+                    id: acc.gameId,
+                    name: acc.guls.game,
+                },
             }))
         );
 };
