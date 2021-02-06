@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "@banzar-team/ez-captcha": "^1.0.4",
+    "cfv": "^1.1.0",
     "node-fetch": "^2.6.1",
     "uuid": "^8.3.2"
   }
