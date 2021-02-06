@@ -14,6 +14,9 @@ logs/
 log/
 *.log
 
+# Certificates
+certs/
+
 # Excludes
 !.eslintrc.js
 !.prettierrc.js
