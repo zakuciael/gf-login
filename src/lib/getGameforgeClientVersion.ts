@@ -1,5 +1,4 @@
-import { GameforgeClientReleaseVersions } from "../types/GameforgeClientReleaseVersions";
-import { GameforgeClientVersion } from "../types/GameforgeClientVersion";
+import { GameforgeClientReleaseVersions, GameforgeClientVersion } from "../types";
 import { InvalidResponseError } from "./errors";
 import { getFileProperties } from "cfv";
 import fetch from "node-fetch";

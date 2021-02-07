@@ -1,6 +1,6 @@
 import { getFirstNumberFromString, getStringFromLeft, getStringFromRight } from "./strings";
-import { GameforgeClientVersion } from "../../types/GameforgeClientVersion";
 import { getCharFromType, sha1, sha256 } from "./crypto";
+import { GameforgeClientVersion } from "../../types";
 import { hashCertificate } from "./certificates";
 import { CharType } from "../../types/CharType";
 

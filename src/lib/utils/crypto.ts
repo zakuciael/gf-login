@@ -1,5 +1,5 @@
-import { createHash } from "crypto";
 import { CharType } from "../../types/CharType";
+import { createHash } from "crypto";
 
 const hash = (data: Buffer | string, algorithm: string, upper: boolean): string => {
     const hash = createHash(algorithm).update(data).digest("hex");

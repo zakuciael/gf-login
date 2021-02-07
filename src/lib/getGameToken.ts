@@ -1,7 +1,7 @@
 import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./errors";
-import { GameforgeClientVersion } from "../types/GameforgeClientVersion";
 import { createAccountHash } from "./utils/createAccountHash";
 import { sendStartTimeEvent } from "./sendStartTimeEvent";
+import { GameforgeClientVersion } from "../types";
 import fetch from "node-fetch";
 
 export const getGameToken = async (

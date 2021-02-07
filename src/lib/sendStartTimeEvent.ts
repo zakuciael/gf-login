@@ -1,5 +1,5 @@
-import { GameforgeClientVersion } from "../types/GameforgeClientVersion";
 import { CertificateAgent } from "./utils/certificates";
+import { GameforgeClientVersion } from "../types";
 import { v4 as uuid } from "uuid";
 import { DateTime } from "luxon";
 import fetch from "node-fetch";

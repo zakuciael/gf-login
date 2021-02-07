@@ -1,6 +1,6 @@
 import { CaptchaRequiredError, ForbiddenError, InvalidResponseError } from "./errors";
 import { LoginCaptcha, loginMethod, solveCaptcha } from "@banzar-team/ez-captcha";
-import { GetAccountTokenOptions } from "../types/GetAccountTokenOptions";
+import { GetAccountTokenOptions } from "../types";
 import fetch from "node-fetch";
 
 const generateCaptchaLoginMethod = (
