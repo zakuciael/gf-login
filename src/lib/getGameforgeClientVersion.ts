@@ -1,8 +1,8 @@
-import { GameforgeClientVersion } from "../../types/GameforgeClientVersion";
-import { InvalidResponseError } from "../errors";
+import { GameforgeClientReleaseVersions } from "../types/GameforgeClientReleaseVersions";
+import { GameforgeClientVersion } from "../types/GameforgeClientVersion";
+import { InvalidResponseError } from "./errors";
 import { getFileProperties } from "cfv";
 import fetch from "node-fetch";
-import { GameforgeClientReleaseVersions } from "../../types/GameforgeClientReleaseVersions";
 
 export const getGameforgeClientVersion = (
     releaseVersion = GameforgeClientReleaseVersions.Final
