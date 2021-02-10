@@ -11,6 +11,12 @@
   "engines": {
     "node": ">=12.20.1"
   },
+  "keywords": [
+    "nostale",
+    "login",
+    "gameforge",
+    "captcha"
+  ],
   "scripts": {
     "start": "ts-node src/index.ts",
     "build": "tsc -p tsconfig.json",
