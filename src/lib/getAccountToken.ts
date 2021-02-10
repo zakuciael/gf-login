@@ -1,5 +1,5 @@
 import { CaptchaRequiredError, ForbiddenError, InvalidResponseError } from "./errors";
-import { LoginCaptcha, loginMethod, solveCaptcha } from "@banzar-team/ez-captcha";
+import { LoginCaptcha, loginMethod, solveCaptcha } from "@zakku/ez-captcha";
 import { GetAccountTokenOptions } from "../types";
 import fetch from "node-fetch";
 
