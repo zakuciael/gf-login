@@ -44,6 +44,16 @@ export declare class UnauthorizedError extends Error {}
 
 export declare class ForbiddenError extends Error {}
 
+export declare class CertificateStore {
+    constructor(fullCertPath: string, certPassword: string, hashCertPath: string);
+
+    get fullCert(): Buffer;
+
+    get hashCert(): Buffer;
+
+    get password(): string;
+}
+
 export declare const getGameforgeClientVersion: (
     releaseVersion?: GameforgeClientReleaseVersions
 ) => Promise<GameforgeClientVersion | undefined>;

@@ -1,16 +1,21 @@
-import { CertificateAgent } from "./utils/certificates";
+import { CertificateStore } from "./utils/CertificateStore";
 import { GameforgeClientVersion } from "../types";
 import { v4 as uuid } from "uuid";
 import { DateTime } from "luxon";
 import fetch from "node-fetch";
+import { Agent } from "https";
 
 export const sendStartTimeEvent = (
     installationId: string,
-    clientVersion: GameforgeClientVersion
+    clientVersion: GameforgeClientVersion,
+    certificateStore: CertificateStore
 ): Promise<void> => {
     return fetch(`https://events2.gameforge.com/`, {
         method: "POST",
-        agent: CertificateAgent,
+        agent: new Agent({
+            pfx: certificateStore.fullCert,
+            passphrase: certificateStore.password,
+        }),
         headers: {
             "Content-Type": "application/json",
             "User-Agent": `GameforgeClient/${clientVersion.version

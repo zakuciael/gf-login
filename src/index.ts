@@ -1,5 +1,6 @@
 export { getGameforgeClientVersion } from "./lib/getGameforgeClientVersion";
 export { createAccountHash } from "./lib/utils/createAccountHash";
+export { CertificateStore } from "./lib/utils/CertificateStore";
 export { sendStartTimeEvent } from "./lib/sendStartTimeEvent";
 export { getAccountToken } from "./lib/getAccountToken";
 export { getGameAccounts } from "./lib/getGameAccounts";
