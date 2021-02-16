@@ -14,33 +14,33 @@ npm i @zakku/gf-login
 
 ```typescript
 import {
-  getGameforgeClientVersion,
-  CertificateStore,
-  getAccountToken,
-  getGameAccounts,
-  getGameToken,
-  convertNostaleToken
+    getGameforgeClientVersion,
+    CertificateStore,
+    getAccountToken,
+    getGameAccounts,
+    getGameToken,
+    convertNostaleToken
 } from "@zakku/gf-login";
 
-const certStore = new CertificateStore("./certs/full.p12", "1234567890", "./certs/hash.txt");
+const certStore = new CertificateStore("./cert.p12", "secret_gf_cert_password");
 const installationId = "8cd369b7-3f73-47c4-bf57-3544201ec275";
 const clientVersion = await getGameforgeClientVersion();
 
 const authToken = await getAccountToken(
-  "gf-login@gameforge.sucks.af",
-  "gfpls",
-  installationId
+    "gf-login@gameforge.sucks.af",
+    "gfpls",
+    installationId
 );
 
 const accountId = (await getGameAccounts(authToken, installationId))
-  .find(acc => acc.accountName === "make_nostale_greate_again").id;
+    .find(acc => acc.accountName === "make_nostale_greate_again").id;
 
 const gameToken = await getGameToken(
-  authToken,
-  accountId,
-  installationId,
-  clientVersion,
-  certStore
+    authToken,
+    accountId,
+    installationId,
+    clientVersion,
+    certStore
 );
 
 const loginSession = convertNostaleToken(gameToken);
@@ -89,10 +89,9 @@ const loginSession = convertNostaleToken(gameToken);
 
 ### Utils
 
-- ### CertificateStore(fullCertPath, certPassword, hashCertPath)
-    - **fullCertPath**: string
-    - **certPassword**: string
-    - **hashCertPath**: string
+- ### CertificateStore(filePath, password)
+    - **filePath**: string
+    - **password**: string
 - ### createAccountHash(accountID, installationID, clientVersion, certificateStore)
     - **accountID**: string
     - **installationID**: string
