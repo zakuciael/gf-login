@@ -27,6 +27,7 @@
     "@types/luxon": "^1.25.1",
     "@types/node": "^14.14.13",
     "@types/node-fetch": "^2.5.8",
+    "@types/node-forge": "^0.9.7",
     "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^4.9.1",
     "@typescript-eslint/parser": "^4.9.1",
@@ -42,6 +43,7 @@
     "cfv": "^1.1.0",
     "luxon": "^1.25.0",
     "node-fetch": "^2.6.1",
+    "node-forge": "^0.10.0",
     "uuid": "^8.3.2"
   }
 }
