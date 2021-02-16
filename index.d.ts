@@ -60,7 +60,8 @@ export declare const getGameforgeClientVersion: (
 
 export declare const sendStartTimeEvent: (
     installationId: string,
-    clientVersion: GameforgeClientVersion
+    clientVersion: GameforgeClientVersion,
+    certificateStore: CertificateStore
 ) => Promise<void>;
 
 export declare const getAccountToken: (
@@ -79,13 +80,15 @@ export declare const getGameToken: (
     authToken: string,
     accountID: string,
     installationID: string,
-    clientVersion: GameforgeClientVersion
+    clientVersion: GameforgeClientVersion,
+    certificateStore: CertificateStore
 ) => Promise<string>;
 
 export declare const createAccountHash: (
     accountID: string,
     installationID: string,
-    clientVersion: GameforgeClientVersion
+    clientVersion: GameforgeClientVersion,
+    certificateStore: CertificateStore
 ) => string | undefined;
 
 export declare const convertNostaleToken: (token: string) => string;

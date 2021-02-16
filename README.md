@@ -26,14 +26,14 @@ const certStore = new CertificateStore("./certs/full.p12", "1234567890", "./cert
 const installationId = "8cd369b7-3f73-47c4-bf57-3544201ec275";
 const clientVersion = await getGameforgeClientVersion();
 
-const authToken = getAccountToken(
+const authToken = await getAccountToken(
   "gf-login@gameforge.sucks.af",
   "gfpls",
   installationId
 );
 
 const accountId = (await getGameAccounts(authToken, installationId))
-  .filter(acc => acc.accountName === "make_nostale_greate_again");
+  .find(acc => acc.accountName === "make_nostale_greate_again").id;
 
 const gameToken = await getGameToken(
   authToken,
