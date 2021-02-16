@@ -45,7 +45,7 @@ export declare class UnauthorizedError extends Error {}
 export declare class ForbiddenError extends Error {}
 
 export declare class CertificateStore {
-    constructor(fullCertPath: string, certPassword: string, hashCertPath: string);
+    constructor(filePath: string, password: string);
 
     get fullCert(): Buffer;
 
