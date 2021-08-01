@@ -16,7 +16,9 @@ export const getGameforgeClientVersion = (
         .then((data) => getFileProperties(data))
         .then((props) => {
             const rawVersion = props.FileVersion as string;
-            const match = rawVersion.match(/(\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,5}) \((\w+)@(\w+)\)/);
+            const match = rawVersion.match(
+                /(\d{1,2}\.\d{1,2}\.\d{1,2}\.\d{1,5}) \(((?:\w+|-|_)+)@(\w+)\)/
+            );
 
             return match != undefined
                 ? { version: match[1], branch: match[2], commitId: match[3] }
