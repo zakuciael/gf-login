@@ -1,6 +1,6 @@
 {
   "name": "@zakku/gf-login",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A node.js library for authenticating to GameFail's servers.",
   "main": "dist/index.js",
   "types": "./index.d.ts",
