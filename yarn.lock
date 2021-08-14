@@ -171,9 +171,9 @@
     eslint-visitor-keys "^2.0.0"
 
 "@zakku/ez-captcha@^1.0.2":
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@zakku/ez-captcha/-/ez-captcha-1.0.2.tgz#2606a7686aab4bce0b4b41c525565b4e767afcef"
-  integrity sha512-Sct6uF2TMbX4Gd4P/2XyioQ2Xy8r98fiKOqzjF1B9S+IOdj7M2Qz+3dKCN4AdSCcoVhgPAloX1/ENwAggHC0hw==
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@zakku/ez-captcha/-/ez-captcha-1.0.3.tgz#ebb81f7b5ab813627304ece23e1a969a90ff4246"
+  integrity sha512-SHFVWBgV5+xBxbxT9GK9zV6pNDVAFefBROjR2vxMy4Ti51pckI/wygwvFc6gUInA886HIxHIY1BIuBs0UR6xKA==
   dependencies:
     node-fetch "^2.6.1"
 
