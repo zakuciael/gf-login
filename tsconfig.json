@@ -12,6 +12,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "downlevelIteration": true,
+    "declaration": true
   },
   "exclude": [
     "node_modules/"

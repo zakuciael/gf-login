@@ -3,7 +3,7 @@
   "version": "1.1.2",
   "description": "A node.js library for authenticating to GameFail's servers.",
   "main": "dist/index.js",
-  "types": "./index.d.ts",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/zakuciael/gf-login.git",
   "author": "Krzysztof Saczuk <zakuciael@outlook.com>",
   "license": "MIT",
