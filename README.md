@@ -2,6 +2,11 @@
 
 A node.js library for authenticating to GameFail's servers.
 
+## Prerequisites
+
+For this library to work it is required to have `openssl` installed on your system.
+> Note: Versions prior to **2.0.0** doesn't require `openssl` but are bigger in size.
+
 ## Installation
 
 ```bash
