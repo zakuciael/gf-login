@@ -1,6 +1,7 @@
-import { asn1, pkcs12, pki, util } from "node-forge";
+import { spawn as cpspawn } from "child_process";
+import which from "which";
 import path from "path";
-import fs from "fs";
+import fs from "fs/promises";
 
 const fixHashCertificate = (cert: Buffer) => {
     const temp = Buffer.from(cert.toString().replace(/\r\n|\r|\n/g, "\n"));
@@ -12,25 +13,135 @@ export class CertificateStore {
     private readonly _hashCert: Buffer;
     private readonly _password: string;
 
-    constructor(filePath: string, password: string) {
-        this._fullCert = fs.readFileSync(path.resolve(filePath));
+    constructor(fullCert: Buffer, hashCert: Buffer, password: string) {
         this._password = password;
+        this._fullCert = fullCert;
+        this._hashCert = hashCert;
+    }
 
-        const pkcs12Cert = pkcs12.pkcs12FromAsn1(
-            asn1.fromDer(util.decode64(this._fullCert.toString("base64"))),
-            this._password
+    public static async create(
+        filePath: string,
+        password: string,
+        options?: { opensslPath?: string }
+    ): Promise<CertificateStore> {
+        filePath = path.resolve(filePath);
+        options = options ?? {};
+
+        const fullCert = await fs.readFile(filePath);
+        const hashCert = await CertificateStore.readHashCert(
+            filePath,
+            password,
+            options.opensslPath ?? "openssl"
         );
 
-        const certBags = pkcs12Cert.getBags({ bagType: pki.oids.certBag })[pki.oids.certBag];
+        return new CertificateStore(fullCert, fixHashCertificate(hashCert), password);
+    }
 
-        if (certBags == undefined || certBags.length < 1)
-            throw new Error("Invalid certificate provided, no cert bags found.");
+    private static async readHashCert(
+        filePath: string,
+        password: string,
+        opensslPath = "openssl"
+    ): Promise<Buffer> {
+        const start = "-----BEGIN CERTIFICATE-----";
+        const end = "-----END CERTIFICATE-----";
+        const { stdout } = await CertificateStore.spawn(opensslPath, [
+            "pkcs12",
+            `-in`,
+            filePath,
+            `-passin`,
+            `pass:${password}`,
+            `-nodes`,
+        ]);
 
-        const firstCert = certBags[0];
-        if (firstCert.cert == undefined)
-            throw new Error("Invalid certificate provided, no public certificates found.");
+        if (!stdout)
+            throw new Error(
+                "Unable to read certificate, no output was received from the openssl command"
+            );
 
-        this._hashCert = fixHashCertificate(Buffer.from(pki.certificateToPem(firstCert.cert)));
+        const startOffset = stdout.indexOf(start);
+        const endOffset = stdout.indexOf(end);
+        if (startOffset === -1 || endOffset === -1)
+            throw new Error(
+                "Unable to read certificate, specified file doesn't contain an valid certificate"
+            );
+
+        return Buffer.from(stdout.substring(startOffset, endOffset + end.length));
+    }
+
+    private static async spawn(
+        command: string,
+        params: string[]
+    ): Promise<{ code: number | null; stdout: string; stderr: string }> {
+        await which(command).catch(
+            () => new Error(`Could not find openssl on your system on this path: ${command}`)
+        );
+
+        return new Promise((resolve, reject) => {
+            let stdout = "";
+            let stderr = "";
+
+            const openssl = cpspawn(command, params);
+
+            openssl.stdout.on("data", (data: Buffer) => {
+                stdout += data.toString("binary");
+            });
+
+            openssl.stderr.on("data", (data: Buffer) => {
+                stderr += data.toString("binary");
+            });
+
+            let finished = false;
+            let neededCloses = 2;
+            let code: number | null = -1;
+
+            const done = (err?: Error): void => {
+                if (finished) return;
+
+                if (err) {
+                    finished = true;
+                    return reject(err);
+                }
+
+                if (--neededCloses < 1) {
+                    finished = true;
+
+                    if (code) {
+                        if (
+                            code === 2 &&
+                            (stderr === "" || /depth lookup: unable to/.test(stderr))
+                        ) {
+                            return resolve({ code, stdout, stderr });
+                        }
+
+                        return reject(
+                            new Error(
+                                "Invalid openssl exit code: " +
+                                    code +
+                                    "\n% openssl " +
+                                    params.join(" ") +
+                                    "\n" +
+                                    stderr
+                            )
+                        );
+                    } else {
+                        return resolve({ code, stdout, stderr });
+                    }
+                }
+            };
+
+            openssl.on("error", (err) => done(err));
+
+            openssl.on("exit", (ret) => {
+                code = ret;
+                done();
+            });
+
+            openssl.on("close", () => {
+                stdout = Buffer.from(stdout, "binary").toString("utf-8");
+                stderr = Buffer.from(stderr, "binary").toString("utf-8");
+                done();
+            });
+        });
     }
 
     get fullCert(): Buffer {
