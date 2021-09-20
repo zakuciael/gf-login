@@ -1,7 +1,7 @@
 import { CertificateStore } from "./utils/CertificateStore";
 import { GameforgeClientVersion } from "../types";
+import dateFormat from "dateformat";
 import { v4 as uuid } from "uuid";
-import { DateTime } from "luxon";
 import fetch from "node-fetch";
 import { Agent } from "https";
 
@@ -33,7 +33,7 @@ export const sendStartTimeEvent = (
                 version: clientVersion.version,
             },
             id: 1,
-            localtime: DateTime.local().toFormat("yyyy-MM-dd'T'HH:mm:ssZZZ"),
+            localtime: dateFormat(new Date(), "isoDateTime"),
             start_count: 1,
             start_time: 7000,
             type: "start_time",

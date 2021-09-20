@@ -24,7 +24,7 @@
     "prepublish": "yarn lint && yarn build"
   },
   "devDependencies": {
-    "@types/luxon": "^1.25.1",
+    "@types/dateformat": "^3.0.1",
     "@types/node": "^14.14.13",
     "@types/node-fetch": "^2.5.8",
     "@types/node-forge": "^0.9.7",
@@ -42,7 +42,7 @@
   "dependencies": {
     "@zakku/ez-captcha": "^1.0.2",
     "cfv": "^1.1.0",
-    "luxon": "^1.25.0",
+    "dateformat": "^4.5.1",
     "node-fetch": "^2.6.1",
     "uuid": "^8.3.2",
     "which": "^2.0.2"
