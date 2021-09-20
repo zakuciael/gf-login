@@ -22,7 +22,7 @@ import {
     convertNostaleToken
 } from "@zakku/gf-login";
 
-const certStore = new CertificateStore("./cert.p12", "secret_gf_cert_password");
+const certStore = await CertificateStore.create("./cert.p12", "secret_gf_cert_password");
 const installationId = "8cd369b7-3f73-47c4-bf57-3544201ec275";
 const clientVersion = await getGameforgeClientVersion();
 
@@ -89,14 +89,18 @@ const loginSession = convertNostaleToken(gameToken);
 
 ### Utils
 
-- ### CertificateStore(filePath, password)
-    - **filePath**: string
-    - **password**: string
+- ### CertificateStore(fullCert, hashCert, password)
+  - **fullCert**: Buffer
+  - **hashCert**: Buffer
+  - **password**: string
+- ### CertificateStore.create(filePath, password)
+  - **filePath**: string
+  - **password**: string
 - ### createAccountHash(accountID, installationID, clientVersion, certificateStore)
-    - **accountID**: string
-    - **installationID**: string
-    - **clientVersion**: GameforgeClientVersion
-    - **certificateStore**: CertificateStore
+  - **accountID**: string
+  - **installationID**: string
+  - **clientVersion**: GameforgeClientVersion
+  - **certificateStore**: CertificateStore
 
 ### Methods
 
