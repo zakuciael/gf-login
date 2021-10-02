@@ -1,9 +1,11 @@
 import { getFirstNumberFromString, getStringFromLeft, getStringFromRight } from "./strings";
-import { getCharFromType, sha1, sha256 } from "./crypto";
 import { GameforgeClientVersion } from "../../types";
 import { CertificateStore } from "./CertificateStore";
-import { CharType } from "../../types/CharType";
+import { sha1, sha256 } from "./crypto";
 
+/**
+ * @public
+ */
 export const createAccountHash = (
     accountID: string,
     installationID: string,
@@ -19,7 +21,7 @@ export const createAccountHash = (
             getStringFromLeft(
                 sha256(
                     sha256(certificateStore.hashCert) +
-                        sha1(getCharFromType(CharType.RETURN_C) + clientVersion.version) +
+                        sha1("C" + clientVersion.version) +
                         sha256(installationID) +
                         sha1(accountID)
                 ),
@@ -32,7 +34,7 @@ export const createAccountHash = (
             getStringFromRight(
                 sha256(
                     sha1(certificateStore.hashCert) +
-                        sha256(getCharFromType(CharType.RETURN_C) + clientVersion.version) +
+                        sha256("C" + clientVersion.version) +
                         sha1(installationID) +
                         sha256(accountID)
                 ),

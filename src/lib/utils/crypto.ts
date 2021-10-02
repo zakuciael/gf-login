@@ -13,7 +13,3 @@ export const sha1 = (data: Buffer | string, upper = false): string => {
 export const sha256 = (data: Buffer | string, upper = false): string => {
     return hash(data, "sha256", upper);
 };
-
-export const getCharFromType = (type: CharType): string => {
-    return type === CharType.RETURN_C ? "C" : type === CharType.RETURN_F ? "F" : "";
-};
