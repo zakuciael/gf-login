@@ -6,6 +6,7 @@ node_modules/
 # Compiled code
 declarations/
 buiild/
+docs/
 dist/
 out/
 *.js
