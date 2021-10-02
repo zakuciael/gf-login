@@ -3,6 +3,9 @@ import { LoginCaptcha, loginMethod, solveCaptcha } from "@zakku/ez-captcha";
 import { GetAccountTokenOptions } from "../types/GetAccountTokenOptions";
 import fetch from "node-fetch";
 
+/**
+ * @internal
+ */
 const generateCaptchaLoginMethod = (
     email: string,
     password: string,
@@ -21,6 +24,9 @@ const generateCaptchaLoginMethod = (
     };
 };
 
+/**
+ * @public
+ */
 export const getAccountToken = (
     email: string,
     password: string,

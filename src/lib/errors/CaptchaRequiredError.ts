@@ -1,3 +1,6 @@
+/**
+ * @public
+ */
 export class CaptchaRequiredError extends Error {
     public readonly challengeId: string;
 

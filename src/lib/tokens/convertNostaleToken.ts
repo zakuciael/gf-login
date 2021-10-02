@@ -1,3 +1,6 @@
+/**
+ * @public
+ */
 export const convertNostaleToken = (token: string): string => {
     return token
         .split("")

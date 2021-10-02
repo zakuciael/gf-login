@@ -5,6 +5,9 @@ import { v4 as uuid } from "uuid";
 import fetch from "node-fetch";
 import { Agent } from "https";
 
+/**
+ * @public
+ */
 export const sendStartTimeEvent = (
     installationId: string,
     clientVersion: GameforgeClientVersion,

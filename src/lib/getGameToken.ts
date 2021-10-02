@@ -5,6 +5,9 @@ import { sendStartTimeEvent } from "./sendStartTimeEvent";
 import { GameforgeClientVersion } from "../types";
 import fetch from "node-fetch";
 
+/**
+ * @public
+ */
 export const getGameToken = async (
     authToken: string,
     accountID: string,

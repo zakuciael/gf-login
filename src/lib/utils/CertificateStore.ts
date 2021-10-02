@@ -8,6 +8,9 @@ const fixHashCertificate = (cert: Buffer) => {
     return temp[temp.length - 1] !== 0x0a ? Buffer.concat([temp, Buffer.from([0x0a])]) : temp;
 };
 
+/**
+ * @public
+ */
 export class CertificateStore {
     private readonly _fullCert: Buffer;
     private readonly _hashCert: Buffer;
@@ -116,11 +119,11 @@ export class CertificateStore {
                         return reject(
                             new Error(
                                 "Invalid openssl exit code: " +
-                                    code +
-                                    "\n% openssl " +
-                                    params.join(" ") +
-                                    "\n" +
-                                    stderr
+                                code +
+                                "\n% openssl " +
+                                params.join(" ") +
+                                "\n" +
+                                stderr
                             )
                         );
                     } else {

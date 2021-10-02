@@ -1,3 +1,6 @@
+/**
+ * @public
+ */
 export class InvalidResponseError extends Error {
     public readonly statusText: string;
     public readonly status: number;

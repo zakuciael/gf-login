@@ -3,9 +3,13 @@ import { InvalidResponseError } from "./errors";
 import { getFileProperties } from "cfv";
 import fetch from "node-fetch";
 
+/**
+ * @public
+ */
 export const getGameforgeClientVersion = (
     releaseVersion = GameforgeClientReleaseVersions.Final
 ): Promise<GameforgeClientVersion | undefined> => {
+    // noinspection HttpUrlsUsage
     return fetch(`http://dl.tnt.gameforge.com/tnt/${releaseVersion}/gfclient.exe`, {
         method: "GET",
     })

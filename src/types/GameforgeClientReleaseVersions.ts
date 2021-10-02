@@ -1,3 +1,6 @@
+/**
+ * @public
+ */
 export enum GameforgeClientReleaseVersions {
     Final = "final-ms3",
     Beta = "beta-ms3",
