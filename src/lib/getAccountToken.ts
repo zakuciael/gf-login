@@ -1,11 +1,29 @@
 import { CaptchaRequiredError, ForbiddenError, InvalidResponseError } from "./errors";
 import { LoginCaptcha, loginMethod, solveCaptcha } from "@zakku/ez-captcha";
-import type { GetAccountTokenOptions } from "../types";
 import fetch from "node-fetch";
 
 /**
- * @internal
+ * Represents options passed to {@link getAccountToken} method.
+ * @public
  */
+export interface GetAccountTokenOptions {
+    /**
+     * Specifies if auto-captcha system should be enabled for the request
+     * @default true
+     */
+    autoCaptcha?: boolean;
+    /**
+     * Maximum amount of attempts at solving captcha
+     * @default 5
+     */
+    maxCaptchaAttempts?: number;
+    /**
+     * The challenge id required to solve the captcha
+     * @default Resolved by the auto-captcha system
+     */
+    challengeId?: string;
+}
+
 const generateCaptchaLoginMethod = (
     email: string,
     password: string,
