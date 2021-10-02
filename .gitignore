@@ -4,6 +4,7 @@ node_modules/
 .idea/*
 
 # Compiled code
+declarations/
 buiild/
 dist/
 out/

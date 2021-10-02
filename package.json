@@ -20,9 +20,11 @@
   ],
   "scripts": {
     "start": "ts-node src/index.ts",
-    "build": "tsc -p tsconfig.json",
+    "build": "yarn build:source && yarn build:declarations",
+    "build:source": "rimraf dist/ && tsc -p tsconfig.json",
+    "build:declarations": "rimraf declarations/ && tsc -p tsconfig.json --declaration --declarationMap --declarationDir declarations/ && api-extractor run",
     "lint": "eslint src/**/*.ts",
-    "prepublish": "yarn lint && yarn build"
+    "prepublishOnly": "yarn lint && yarn build"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.18.11",

@@ -4,6 +4,7 @@ node_modules/
 .idea/
 logs/
 src/
+declarations/
 
 .prettierrc.js
 .eslintrc.js
