@@ -1,0 +1,30 @@
+name: Generate docs
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  docs:
+    name: Generate docs using TypeDoc
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: "yarn"
+      - name: Install dependencies
+        run: yarn install
+      - name: Generate docs
+        run: yarn build:docs
+      - name: Upload docs to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: ./docs
+          force_orphan: true
+          cname: gf-login.zakku.eu
