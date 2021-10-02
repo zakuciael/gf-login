@@ -4,7 +4,12 @@ import { CertificateStore } from "./CertificateStore";
 import { sha1, sha256 } from "./crypto";
 
 /**
- * @public
+ * Creates account hash used in the API
+ * @param accountID - The account id used in the API request
+ * @param installationID - The installation id used in the API request
+ * @param clientVersion - The client version used in the API request
+ * @param certificateStore - The certificate store loaded with Gameforge's certificate
+ * @return Generated account hash or undefined if specified wrong installation id
  */
 export const createAccountHash = (
     accountID: string,

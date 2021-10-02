@@ -6,7 +6,13 @@ import type { GameforgeClientVersion } from "../types";
 import fetch from "node-fetch";
 
 /**
- * @public
+ * Authenticate to the game using Gameforge account
+ * @param authToken - The account's auth token
+ * @param accountID - The game account id
+ * @param installationID - The installation id
+ * @param clientVersion - The Gameforge Client version information
+ * @param certificateStore - The certificate store loaded with Gameforge's certificate
+ * @return The game token
  */
 export const getGameToken = async (
     authToken: string,

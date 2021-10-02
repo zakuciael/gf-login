@@ -6,7 +6,10 @@ import fetch from "node-fetch";
 import { Agent } from "https";
 
 /**
- * @public
+ * Sends a dummy "start time" event to the API
+ * @param installationId - The installation id
+ * @param clientVersion - The Gameforge Client version information
+ * @param certificateStore - The certificate store loaded with Gameforge's certificate
  */
 export const sendStartTimeEvent = (
     installationId: string,

@@ -1,4 +1,5 @@
 /**
+ * An error that indicates that client is not authenticated.
  * @public
  */
 export class UnauthorizedError extends Error {

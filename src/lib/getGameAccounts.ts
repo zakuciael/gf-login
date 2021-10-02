@@ -21,7 +21,10 @@ interface RawGameAccount {
 }
 
 /**
- * @public
+ * Get game accounts associated with the Gameforge account
+ * @param authToken - The account's auth token
+ * @param installationID - The installation id
+ * @return An array of game accounts
  */
 export const getGameAccounts = (
     authToken: string,

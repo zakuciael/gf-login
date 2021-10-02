@@ -5,7 +5,9 @@ import { getFileProperties } from "cfv";
 import fetch from "node-fetch";
 
 /**
- * @public
+ * Get Gameforge Client version information
+ * @param releaseVersion - The Gameforge Client release version
+ * @return {@link GameforgeClientVersion} containing information about the client version
  */
 export const getGameforgeClientVersion = (
     releaseVersion = GameforgeClientReleaseVersions.Final

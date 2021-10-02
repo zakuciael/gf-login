@@ -43,7 +43,12 @@ const generateCaptchaLoginMethod = (
 };
 
 /**
- * @public
+ * Authenticates to the API using Gameforge account
+ * @param email - The account's email address
+ * @param password - The account's password
+ * @param installationID - The installation id
+ * @param opts - Additional options
+ * @return The account's auth token
  */
 export const getAccountToken = (
     email: string,

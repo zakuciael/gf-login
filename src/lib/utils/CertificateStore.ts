@@ -1,7 +1,7 @@
 import { spawn as cpspawn } from "child_process";
+import fs from "fs/promises";
 import which from "which";
 import path from "path";
-import fs from "fs/promises";
 
 const fixHashCertificate = (cert: Buffer) => {
     const temp = Buffer.from(cert.toString().replace(/\r\n|\r|\n/g, "\n"));
@@ -9,23 +9,44 @@ const fixHashCertificate = (cert: Buffer) => {
 };
 
 /**
+ * Represents OpenSSL options passed to {@link CertificateStore.create} method.
  * @public
  */
+export interface CreateCertificateStoreOptions {
+    /**
+     * Path to the `openssl` executable
+     * @default Resolved from the `$PATH` env.
+     */
+    opensslPath?: string;
+}
+
 export class CertificateStore {
     private readonly _fullCert: Buffer;
     private readonly _hashCert: Buffer;
     private readonly _password: string;
 
+    /**
+     * @param fullCert - Encrypted .p12 certificate
+     * @param hashCert - Decrypted CA certificate
+     * @param password - Certificate password
+     */
     constructor(fullCert: Buffer, hashCert: Buffer, password: string) {
         this._password = password;
         this._fullCert = fullCert;
         this._hashCert = hashCert;
     }
 
+    /**
+     * Creates {@link CertificateStore} by reading .p12 certificate from the file system
+     * @param filePath - Path to the .p12 certificate
+     * @param password - Certificate password
+     * @param options - OpenSSL options
+     * @return {@link CertificateStore} created with the contents of the .p12 certificate
+     */
     public static async create(
         filePath: string,
         password: string,
-        options?: { opensslPath?: string }
+        options?: CreateCertificateStoreOptions
     ): Promise<CertificateStore> {
         filePath = path.resolve(filePath);
         options = options ?? {};
@@ -147,14 +168,23 @@ export class CertificateStore {
         });
     }
 
+    /**
+     * @return Encrypted .p12 certificate
+     */
     get fullCert(): Buffer {
         return this._fullCert;
     }
 
+    /**
+     * @return Decrypted CA certificate
+     */
     get hashCert(): Buffer {
         return this._hashCert;
     }
 
+    /**
+     * @return Certificate password
+     */
     get password(): string {
         return this._password;
     }
