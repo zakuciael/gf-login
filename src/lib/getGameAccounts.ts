@@ -1,7 +1,28 @@
 import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./errors";
-import { GameAccount, RawGameAccount } from "../types/GameAccount";
+import type { GameAccount } from "../types";
 import fetch from "node-fetch";
 
+interface RawGameAccount {
+    id: string;
+    clientId: string;
+    gameId: string;
+    gameEnvironmentId: string;
+    userId: string;
+    accountGroup: string;
+    displayName: string;
+    usernames: string[];
+    created: string; // Date
+    deleted: string | null; // Date
+    preDeleted: string | null; // Date
+    lastLogin: string | null; // Date
+    accountNumericId: number;
+    guls: { game: string; server: string; user: string; lang: string };
+    wallet: { currencies: { amount: number; currencyId: string; locaKey: string }[] };
+}
+
+/**
+ * @public
+ */
 export const getGameAccounts = (
     authToken: string,
     installationID: string
