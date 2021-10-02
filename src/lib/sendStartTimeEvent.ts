@@ -1,5 +1,5 @@
 import { CertificateStore } from "./utils/CertificateStore";
-import { GameforgeClientVersion } from "../types";
+import type { GameforgeClientVersion } from "../types";
 import dateFormat from "dateformat";
 import { v4 as uuid } from "uuid";
 import fetch from "node-fetch";

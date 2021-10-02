@@ -1,6 +1,6 @@
 import { CaptchaRequiredError, ForbiddenError, InvalidResponseError } from "./errors";
 import { LoginCaptcha, loginMethod, solveCaptcha } from "@zakku/ez-captcha";
-import { GetAccountTokenOptions } from "../types/GetAccountTokenOptions";
+import type { GetAccountTokenOptions } from "../types";
 import fetch from "node-fetch";
 
 /**

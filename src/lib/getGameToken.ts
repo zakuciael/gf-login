@@ -2,7 +2,7 @@ import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./error
 import { createAccountHash } from "./utils/createAccountHash";
 import { CertificateStore } from "./utils/CertificateStore";
 import { sendStartTimeEvent } from "./sendStartTimeEvent";
-import { GameforgeClientVersion } from "../types";
+import type { GameforgeClientVersion } from "../types";
 import fetch from "node-fetch";
 
 /**

@@ -1,2 +1,4 @@
 export * from "./GameforgeClientReleaseVersions";
-export * from "./GameforgeClientVersion";
+export type { GameforgeClientVersion } from "./GameforgeClientVersion";
+export type { GetAccountTokenOptions } from "./GetAccountTokenOptions";
+export type { GameAccount, GameInfo } from "./GameAccount";

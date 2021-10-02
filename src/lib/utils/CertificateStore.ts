@@ -119,11 +119,11 @@ export class CertificateStore {
                         return reject(
                             new Error(
                                 "Invalid openssl exit code: " +
-                                code +
-                                "\n% openssl " +
-                                params.join(" ") +
-                                "\n" +
-                                stderr
+                                    code +
+                                    "\n% openssl " +
+                                    params.join(" ") +
+                                    "\n" +
+                                    stderr
                             )
                         );
                     } else {
