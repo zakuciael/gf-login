@@ -2,6 +2,7 @@
   "name": "@zakku/gf-login",
   "version": "2.0.1",
   "description": "A node.js library for authenticating to GameFail's servers.",
+  "sideEffect": false,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": "https://github.com/zakuciael/gf-login.git",
