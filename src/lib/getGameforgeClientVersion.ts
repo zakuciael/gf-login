@@ -6,6 +6,7 @@ import fetch from "node-fetch";
 
 /**
  * Get Gameforge Client version information
+ * @public
  * @param releaseVersion - The Gameforge Client release version
  * @return {@link GameforgeClientVersion} containing information about the client version
  */

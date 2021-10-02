@@ -20,6 +20,10 @@ export interface CreateCertificateStoreOptions {
     opensslPath?: string;
 }
 
+/**
+ * Utility class for storing .p12 certificates
+ * @public
+ */
 export class CertificateStore {
     private readonly _fullCert: Buffer;
     private readonly _hashCert: Buffer;

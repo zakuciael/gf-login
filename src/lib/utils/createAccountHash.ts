@@ -5,6 +5,7 @@ import { sha1, sha256 } from "./crypto";
 
 /**
  * Creates account hash used in the API
+ * @public
  * @param accountID - The account id used in the API request
  * @param installationID - The installation id used in the API request
  * @param clientVersion - The client version used in the API request

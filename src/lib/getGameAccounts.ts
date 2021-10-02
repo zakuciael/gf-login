@@ -22,6 +22,7 @@ interface RawGameAccount {
 
 /**
  * Get game accounts associated with the Gameforge account
+ * @public
  * @param authToken - The account's auth token
  * @param installationID - The installation id
  * @return An array of game accounts

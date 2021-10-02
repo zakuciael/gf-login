@@ -7,6 +7,7 @@ import fetch from "node-fetch";
 
 /**
  * Authenticate to the game using Gameforge account
+ * @public
  * @param authToken - The account's auth token
  * @param accountID - The game account id
  * @param installationID - The installation id

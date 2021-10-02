@@ -1,5 +1,6 @@
 /**
  * Converts the UUID token into NosTale's login token
+ * @public
  * @param token - The token to convert
  * @return - Converted token
  */

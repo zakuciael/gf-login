@@ -44,6 +44,7 @@ const generateCaptchaLoginMethod = (
 
 /**
  * Authenticates to the API using Gameforge account
+ * @public
  * @param email - The account's email address
  * @param password - The account's password
  * @param installationID - The installation id

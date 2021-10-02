@@ -7,6 +7,7 @@ import { Agent } from "https";
 
 /**
  * Sends a dummy "start time" event to the API
+ * @public
  * @param installationId - The installation id
  * @param clientVersion - The Gameforge Client version information
  * @param certificateStore - The certificate store loaded with Gameforge's certificate
