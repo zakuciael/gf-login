@@ -1,15 +1,15 @@
 import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./errors";
+import type { GameAccount, GameforgeClientVersion } from "../types";
 import { createAccountHash } from "./utils/createAccountHash";
+import { sendGameStartedEvent } from "./sendGameStartedEvent";
 import { CertificateStore } from "./utils/CertificateStore";
-import { sendStartTimeEvent } from "./sendStartTimeEvent";
-import type { GameforgeClientVersion } from "../types";
 import fetch from "node-fetch";
 
 /**
  * Authenticate to the game using Gameforge account
  * @public
  * @param authToken - The account's auth token
- * @param accountID - The game account id
+ * @param gameAccount - The game account object
  * @param installationID - The installation id
  * @param clientVersion - The Gameforge Client version information
  * @param certificateStore - The certificate store loaded with Gameforge's certificate
@@ -17,27 +17,34 @@ import fetch from "node-fetch";
  */
 export const getGameToken = async (
     authToken: string,
-    accountID: string,
+    gameAccount: GameAccount,
     installationID: string,
     clientVersion: GameforgeClientVersion,
     certificateStore: CertificateStore
 ): Promise<string> => {
-    await sendStartTimeEvent(installationID, clientVersion, certificateStore);
+    const sessionId = await sendGameStartedEvent(
+        installationID,
+        gameAccount,
+        clientVersion,
+        certificateStore
+    );
+
     return fetch(`https://spark.gameforge.com/api/v1/auth/thin/codes`, {
         method: "POST",
         headers: {
-            Authorization: authToken,
+            Authorization: `Bearer ${authToken}`,
             "Content-Type": "application/json",
             "TNT-Installation-Id": installationID,
             "User-Agent": `Chrome/C${clientVersion.version} (${createAccountHash(
-                accountID,
+                gameAccount.id,
                 installationID,
                 clientVersion,
                 certificateStore
-            )}) GameforgeClient/${clientVersion.version.split(".").slice(0, 3).join(".")}`,
+            )})`,
         },
         body: JSON.stringify({
-            platformGameAccountId: accountID,
+            gsid: `${sessionId}-${Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000}`,
+            platformGameAccountId: gameAccount.id,
         }),
     })
         .then((res) => {

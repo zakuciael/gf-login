@@ -52,12 +52,12 @@ const authToken = await getAccountToken(
     installationId
 );
 
-const accountId = (await getGameAccounts(authToken, installationId))
-    .find(acc => acc.accountName === "make_nostale_greate_again").id!;
+const gameAccount = (await getGameAccounts(authToken, installationId))
+    .find(acc => acc.accountName === "make_nostale_greate_again");
 
 const gameToken = await getGameToken(
     authToken,
-    accountId,
+    gameAccount,
     installationId,
     clientVersion,
     certStore
