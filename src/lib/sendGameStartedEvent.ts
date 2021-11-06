@@ -7,6 +7,7 @@ import { Agent } from "https";
 
 /**
  * Sends a dummy "game started" event to the API
+ * @public
  * @param installationId - The installation id
  * @param gameAccount - The game account object
  * @param clientVersion- The Gameforge Client version information

@@ -2,6 +2,7 @@ export { getGameforgeClientVersion } from "./lib/getGameforgeClientVersion";
 export { createAccountHash } from "./lib/utils/createAccountHash";
 export { CertificateStore, CreateCertificateStoreOptions } from "./lib/utils/CertificateStore";
 export { sendStartTimeEvent } from "./lib/sendStartTimeEvent";
+export { sendGameStartedEvent } from "./lib/sendGameStartedEvent";
 export { getAccountToken, GetAccountTokenOptions } from "./lib/getAccountToken";
 export { getGameAccounts } from "./lib/getGameAccounts";
 export { getGameToken } from "./lib/getGameToken";
