@@ -65,3 +65,6 @@ const gameToken = await getGameToken(
 
 const loginSession = convertNostaleToken(gameToken);
 ```
+
+## Credits
+- Special thanks to [Xeno](https://github.com/imxeno) and [Lank](https://github.com/Lank891) for the help in reverse engineering **the User-Agent "magic" hash** and **a method for extracting the client's certificates**.
