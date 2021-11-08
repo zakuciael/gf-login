@@ -1,4 +1,5 @@
 import { spawn as cpspawn } from "child_process";
+import untildify from "untildify";
 import fs from "fs/promises";
 import which from "which";
 import path from "path";
@@ -52,14 +53,16 @@ export class CertificateStore {
         password: string,
         options?: CreateCertificateStoreOptions
     ): Promise<CertificateStore> {
-        filePath = path.resolve(filePath);
+        filePath = path.resolve(untildify(path.normalize(filePath)));
         options = options ?? {};
 
         const fullCert = await fs.readFile(filePath);
         const hashCert = await CertificateStore.readHashCert(
             filePath,
             password,
-            options.opensslPath ?? "openssl"
+            options.opensslPath != undefined
+                ? path.resolve(untildify(path.normalize(options.opensslPath)))
+                : "openssl"
         );
 
         return new CertificateStore(fullCert, fixHashCertificate(hashCert), password);
@@ -68,7 +71,7 @@ export class CertificateStore {
     private static async readHashCert(
         filePath: string,
         password: string,
-        opensslPath = "openssl"
+        opensslPath: string
     ): Promise<Buffer> {
         const start = "-----BEGIN CERTIFICATE-----";
         const end = "-----END CERTIFICATE-----";
