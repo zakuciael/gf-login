@@ -100,15 +100,15 @@ export class CertificateStore {
         command: string,
         params: string[]
     ): Promise<{ code: number | null; stdout: string; stderr: string }> {
-        await which(command).catch(
-            () => new Error(`Could not find openssl on your system on this path: ${command}`)
-        );
+        const realPath = await which(command).catch(() => {
+            throw new Error(`Could not find openssl on your system.`);
+        });
 
         return new Promise((resolve, reject) => {
             let stdout = "";
             let stderr = "";
 
-            const openssl = cpspawn(command, params);
+            const openssl = cpspawn(realPath, params);
 
             openssl.stdout.on("data", (data: Buffer) => {
                 stdout += data.toString("binary");
