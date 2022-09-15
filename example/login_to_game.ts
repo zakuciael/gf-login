@@ -5,8 +5,7 @@ const password = "gfpls";
 const installationId = "8cd369b7-3f73-47c4-bf57-3544201ec275";
 
 async function main() {
-    const identity = new Identity();
-    await identity.load("./identity.json");
+    const identity = new Identity("./identity.json");
 
     // const certStore = CertificateStore.create("./cert.p12", "secret_gf_cert_password");
     const certStore = CertificateStore.createFromPem("./all_certs.pem");

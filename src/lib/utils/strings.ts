@@ -36,3 +36,13 @@ export function randomString(size: number): string {
     }
     return str.join("");
 }
+
+export function randomString2(length: number): string {
+    let r = "";
+    const c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const l = c.length;
+    for (let i = 0; i < length; i++) {
+        r += c.charAt(Math.floor(Math.random() * l));
+    }
+    return r;
+}

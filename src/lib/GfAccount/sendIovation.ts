@@ -22,7 +22,8 @@ export const sendIovation = async (
     gameSessionId: string,
     identity: Identity
 ): Promise<boolean> => {
-    throw Error("not used");
+    // You dont have to send iovation
+    // You still can get token soo iovatoin is unnessesary
     const blackbox = new BlackBox(
         gameAccount.id,
         `${gameSessionId}-${randomIntFromInterval(1000, 9999)}`,
@@ -45,12 +46,10 @@ export const sendIovation = async (
         }),
     }).then(async (res) => {
         if (!res.ok) {
-            console.warn(`sendIovation (httpstatus=${res.status})`);
             return false;
         }
         const data = await res.json();
         if (data.status != "ok") {
-            console.warn(`sendIovation nie ok`);
             return false;
         }
         return true;
