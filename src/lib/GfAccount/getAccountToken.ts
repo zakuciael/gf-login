@@ -1,4 +1,4 @@
-import { CaptchaRequiredError, ForbiddenError, InvalidResponseError } from "./errors";
+import { CaptchaRequiredError, ForbiddenError, InvalidResponseError } from "./../errors";
 import { LoginCaptcha, loginMethod, solveCaptcha } from "@zakku/ez-captcha";
 import fetch from "node-fetch";
 
@@ -30,7 +30,9 @@ const generateCaptchaLoginMethod = (
     installationID: string
 ): loginMethod => {
     return (): Promise<LoginCaptcha> => {
-        return getAccountToken(email, password, installationID, { autoCaptcha: false })
+        return getAccountToken(email, password, installationID, {
+            autoCaptcha: false,
+        })
             .then(() => ({
                 requireCaptcha: false,
             }))
@@ -89,7 +91,8 @@ export const getAccountToken = (
                     options.maxCaptchaAttempts
                 );
 
-                if (!captchaResponse.solved) throw new CaptchaRequiredError(captchaResponse.id);
+                if (!captchaResponse.solved)
+                    throw new CaptchaRequiredError(captchaResponse.id);
                 return getAccountToken(email, password, installationID, {
                     autoCaptcha: false,
                     challengeId: captchaResponse.id,

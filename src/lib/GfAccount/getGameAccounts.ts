@@ -1,5 +1,5 @@
-import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./errors";
-import type { GameAccount } from "../types";
+import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./../errors";
+import type { GameAccount } from "../../types";
 import fetch from "node-fetch";
 
 interface RawGameAccount {
@@ -17,7 +17,9 @@ interface RawGameAccount {
     lastLogin: string | null; // Date
     accountNumericId: number;
     guls: { game: string; server: string; user: string; lang: string };
-    wallet: { currencies: { amount: number; currencyId: string; locaKey: string }[] };
+    wallet: {
+        currencies: { amount: number; currencyId: string; locaKey: string }[];
+    };
 }
 
 /**

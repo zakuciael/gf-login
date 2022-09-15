@@ -1,9 +1,10 @@
-import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./errors";
-import type { GameAccount, GameforgeClientVersion } from "../types";
-import { createAccountHash } from "./utils/createAccountHash";
-import { sendGameStartedEvent } from "./sendGameStartedEvent";
-import { CertificateStore } from "./utils/CertificateStore";
+import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./../errors";
+import type { GameAccount, GameforgeClientVersion } from "../../types";
+import { createAccountHash } from "./../utils/createAccountHash";
+import { CertificateStore } from "./../utils/CertificateStore";
 import fetch from "node-fetch";
+import { BlackBox } from "../utils/BlackBox";
+import { Identity } from "../utils/Identity";
 
 /**
  * Authenticate to the game using Gameforge account
@@ -13,38 +14,39 @@ import fetch from "node-fetch";
  * @param installationID - The installation id
  * @param clientVersion - The Gameforge Client version information
  * @param certificateStore - The certificate store loaded with Gameforge's certificate
+ * @param blackbox - Blackbox
+ * @param identity - Identity
  * @return The game token
  */
 export const getGameToken = async (
     authToken: string,
     gameAccount: GameAccount,
-    installationID: string,
+    installationId: string,
     clientVersion: GameforgeClientVersion,
-    certificateStore: CertificateStore
+    certificateStore: CertificateStore,
+    blackbox: BlackBox,
+    identity: Identity
 ): Promise<string> => {
-    const sessionId = await sendGameStartedEvent(
-        installationID,
-        gameAccount,
-        clientVersion,
-        certificateStore
-    );
-
     return fetch(`https://spark.gameforge.com/api/v1/auth/thin/codes`, {
         method: "POST",
         headers: {
-            Authorization: `Bearer ${authToken}`,
-            "Content-Type": "application/json",
-            "TNT-Installation-Id": installationID,
             "User-Agent": `Chrome/C${clientVersion.version} (${createAccountHash(
                 gameAccount.id,
-                installationID,
+                installationId,
                 clientVersion,
                 certificateStore
             )})`,
+            "TNT-Installation-Id": installationId,
+            Origin: "spark://www.gameforge.com",
+            Authorization: `Bearer ${authToken}`,
+            "Content-Type": "application/json",
+            Connection: "Keep-Alive",
         },
         body: JSON.stringify({
-            gsid: `${sessionId}-${Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000}`,
             platformGameAccountId: gameAccount.id,
+            blackbox: blackbox.encrypted(identity),
+            gsid: blackbox.gsid,
+            gameid: gameAccount.game.id,
         }),
     })
         .then((res) => {

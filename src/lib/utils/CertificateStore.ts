@@ -1,8 +1,7 @@
-import { spawn as cpspawn } from "child_process";
-import untildify from "untildify";
-import fs from "fs/promises";
-import which from "which";
+import { asn1, pem, pkcs12, pki, util } from "node-forge";
 import path from "path";
+import fs from "fs";
+import { Agent } from "https";
 
 const fixHashCertificate = (cert: Buffer) => {
     const temp = Buffer.from(cert.toString().replace(/\r\n|\r|\n/g, "\n"));
@@ -10,189 +9,73 @@ const fixHashCertificate = (cert: Buffer) => {
 };
 
 /**
- * Represents OpenSSL options passed to {@link CertificateStore.create} method.
- * @public
- */
-export interface CreateCertificateStoreOptions {
-    /**
-     * Path to the `openssl` executable
-     * @default Resolved from the `$PATH` env.
-     */
-    opensslPath?: string;
-}
-
-/**
- * Utility class for storing .p12 certificates
+ * CertificateStore class is used to setup .pem or .p12 certificate file exported from gfclient.exe
+ *
  * @public
  */
 export class CertificateStore {
-    private readonly _fullCert: Buffer;
     private readonly _hashCert: Buffer;
-    private readonly _password: string;
+    private readonly _agent: Agent;
 
-    /**
-     * @param fullCert - Encrypted .p12 certificate
-     * @param hashCert - Decrypted CA certificate
-     * @param password - Certificate password
-     */
-    constructor(fullCert: Buffer, hashCert: Buffer, password: string) {
-        this._password = password;
-        this._fullCert = fullCert;
+    constructor(agent: Agent, hashCert: Buffer) {
         this._hashCert = hashCert;
+        this._agent = agent;
     }
 
-    /**
-     * Creates {@link CertificateStore} by reading .p12 certificate from the file system
-     * @param filePath - Path to the .p12 certificate
-     * @param password - Certificate password
-     * @param options - OpenSSL options
-     * @return {@link CertificateStore} created with the contents of the .p12 certificate
-     */
-    public static async create(
-        filePath: string,
-        password: string,
-        options?: CreateCertificateStoreOptions
-    ): Promise<CertificateStore> {
-        filePath = path.resolve(untildify(path.normalize(filePath)));
-        options = options ?? {};
+    public static create(filePath: string, password: string): CertificateStore {
+        const fullCert = fs.readFileSync(path.resolve(filePath));
 
-        const fullCert = await fs.readFile(filePath);
-        const hashCert = await CertificateStore.readHashCert(
-            filePath,
-            password,
-            options.opensslPath != undefined
-                ? path.resolve(untildify(path.normalize(options.opensslPath)))
-                : "openssl"
+        const pkcs12Cert = pkcs12.pkcs12FromAsn1(
+            asn1.fromDer(util.decode64(fullCert.toString("base64"))),
+            password
         );
 
-        return new CertificateStore(fullCert, fixHashCertificate(hashCert), password);
-    }
+        const certBags = pkcs12Cert.getBags({ bagType: pki.oids.certBag })[pki.oids.certBag];
 
-    private static async readHashCert(
-        filePath: string,
-        password: string,
-        opensslPath: string
-    ): Promise<Buffer> {
-        const start = "-----BEGIN CERTIFICATE-----";
-        const end = "-----END CERTIFICATE-----";
-        const { stdout } = await CertificateStore.spawn(opensslPath, [
-            "pkcs12",
-            `-in`,
-            filePath,
-            `-passin`,
-            `pass:${password}`,
-            `-nodes`,
-        ]);
+        if (certBags == undefined || certBags.length < 1)
+            throw new Error("Invalid certificate provided, no cert bags found.");
 
-        if (!stdout)
-            throw new Error(
-                "Unable to read certificate, no output was received from the openssl command"
-            );
+        const firstCert = certBags[0];
+        if (firstCert.cert == undefined)
+            throw new Error("Invalid certificate provided, no public certificates found.");
 
-        const startOffset = stdout.indexOf(start);
-        const endOffset = stdout.indexOf(end);
-        if (startOffset === -1 || endOffset === -1)
-            throw new Error(
-                "Unable to read certificate, specified file doesn't contain an valid certificate"
-            );
-
-        return Buffer.from(stdout.substring(startOffset, endOffset + end.length));
-    }
-
-    private static async spawn(
-        command: string,
-        params: string[]
-    ): Promise<{ code: number | null; stdout: string; stderr: string }> {
-        const realPath = await which(command).catch(() => {
-            throw new Error(`Could not find openssl on your system.`);
+        const hashCert = fixHashCertificate(Buffer.from(pki.certificateToPem(firstCert.cert)));
+        const agent = new Agent({
+            pfx: fullCert,
+            passphrase: password,
         });
+        return new CertificateStore(agent, hashCert);
+    }
 
-        return new Promise((resolve, reject) => {
-            let stdout = "";
-            let stderr = "";
+    public static createFromPem(filePath: string): CertificateStore {
+        const fullPemCert = fs.readFileSync(path.resolve(filePath));
 
-            const openssl = cpspawn(realPath, params);
+        const pemCert = pem.decode(fullPemCert.toString());
+        const firstCert = pemCert.find((a) => a.type == "CERTIFICATE");
+        if (firstCert == undefined)
+            throw new Error("Invalid certificate provided, no public certificates found.");
 
-            openssl.stdout.on("data", (data: Buffer) => {
-                stdout += data.toString("binary");
-            });
+        const privateKey = pemCert.find((a) => a.type == "PRIVATE KEY");
+        if (privateKey == undefined)
+            throw new Error("Invalid certificate provided, no private key found.");
 
-            openssl.stderr.on("data", (data: Buffer) => {
-                stderr += data.toString("binary");
-            });
+        const certBody = pem.encode(firstCert);
+        const privateBody = pem.encode(privateKey);
 
-            let finished = false;
-            let neededCloses = 2;
-            let code: number | null = -1;
-
-            const done = (err?: Error): void => {
-                if (finished) return;
-
-                if (err) {
-                    finished = true;
-                    return reject(err);
-                }
-
-                if (--neededCloses < 1) {
-                    finished = true;
-
-                    if (code) {
-                        if (
-                            code === 2 &&
-                            (stderr === "" || /depth lookup: unable to/.test(stderr))
-                        ) {
-                            return resolve({ code, stdout, stderr });
-                        }
-
-                        return reject(
-                            new Error(
-                                "Invalid openssl exit code: " +
-                                    code +
-                                    "\n% openssl " +
-                                    params.join(" ") +
-                                    "\n" +
-                                    stderr
-                            )
-                        );
-                    } else {
-                        return resolve({ code, stdout, stderr });
-                    }
-                }
-            };
-
-            openssl.on("error", (err) => done(err));
-
-            openssl.on("exit", (ret) => {
-                code = ret;
-                done();
-            });
-
-            openssl.on("close", () => {
-                stdout = Buffer.from(stdout, "binary").toString("utf-8");
-                stderr = Buffer.from(stderr, "binary").toString("utf-8");
-                done();
-            });
+        const hashCert = fixHashCertificate(Buffer.from(certBody));
+        const agent = new Agent({
+            cert: certBody,
+            key: privateBody,
+            rejectUnauthorized: false,
         });
+        return new CertificateStore(agent, hashCert);
     }
 
-    /**
-     * @return Encrypted .p12 certificate
-     */
-    get fullCert(): Buffer {
-        return this._fullCert;
-    }
-
-    /**
-     * @return Decrypted CA certificate
-     */
     get hashCert(): Buffer {
         return this._hashCert;
     }
 
-    /**
-     * @return Certificate password
-     */
-    get password(): string {
-        return this._password;
+    get agent(): Agent {
+        return this._agent;
     }
 }
