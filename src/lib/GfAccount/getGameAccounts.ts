@@ -22,6 +22,10 @@ interface RawGameAccount {
     };
 }
 
+interface IAccountsResponse {
+    [key: string]: RawGameAccount;
+}
+
 /**
  * Get game accounts associated with the Gameforge account
  * @public
@@ -41,12 +45,12 @@ export const getGameAccounts = (
         },
     })
         .then((res) => {
-            if (res.ok) return res.json();
+            if (res.ok) return res.json() as Promise<IAccountsResponse>;
             else if (res.status === 401) throw new UnauthorizedError();
             else if (res.status === 403) throw new ForbiddenError();
             else throw new InvalidResponseError(res.status, res.statusText);
         })
-        .then((data: { [key: string]: RawGameAccount }) =>
+        .then((data: IAccountsResponse) =>
             Object.values(data).map((acc) => ({
                 id: acc.id,
                 accountName: acc.displayName,

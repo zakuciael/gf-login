@@ -2,7 +2,7 @@ import { IFingerprint } from "../../types";
 import { fingerprintNoQuotes } from "../../types/Fingerprint";
 
 export function fixFingerprintDataTypes(fingerprint: IFingerprint): IFingerprint {
-    const newFp = (fingerprint as unknown) as Record<string, unknown>;
+    const newFp = fingerprint as unknown as Record<string, unknown>;
 
     // set correct data types (int are intigers, bool are booleans)
     Object.entries(fingerprint).forEach(([key, value]) => {
@@ -18,5 +18,5 @@ export function fixFingerprintDataTypes(fingerprint: IFingerprint): IFingerprint
             }
         }
     });
-    return (newFp as unknown) as IFingerprint;
+    return newFp as unknown as IFingerprint;
 }

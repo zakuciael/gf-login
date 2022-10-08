@@ -75,31 +75,33 @@ export const getAccountToken = (
             password,
             locale: "en_GB",
         }),
-    })
-        .then(async (res) => {
-            const challengeIdHeader = res.headers.get("gf-challenge-id");
+    }).then(async (res): Promise<string> => {
+        const challengeIdHeader = res.headers.get("gf-challenge-id");
 
-            if (res.ok) return res.json();
-            else if (res.status === 403) throw new ForbiddenError();
-            else if (res.status === 409 && challengeIdHeader) {
-                const challengeId = challengeIdHeader.split(";")[0];
-                if (!options.autoCaptcha) throw new CaptchaRequiredError(challengeId);
+        if (res.ok) {
+            interface IResponse {
+                token: string;
+            }
+            const r = (await res.json()) as IResponse;
+            return r.token;
+        } else if (res.status === 403) throw new ForbiddenError();
+        else if (res.status === 409 && challengeIdHeader) {
+            const challengeId = challengeIdHeader.split(";")[0];
+            if (!options.autoCaptcha) throw new CaptchaRequiredError(challengeId);
 
-                const captchaResponse = await solveCaptcha(
-                    challengeId,
-                    generateCaptchaLoginMethod(email, password, installationID),
-                    options.maxCaptchaAttempts
-                );
+            const captchaResponse = await solveCaptcha(
+                challengeId,
+                generateCaptchaLoginMethod(email, password, installationID),
+                options.maxCaptchaAttempts
+            );
 
-                if (!captchaResponse.solved) throw new CaptchaRequiredError(captchaResponse.id);
-                return getAccountToken(email, password, installationID, {
-                    autoCaptcha: false,
-                    challengeId: captchaResponse.id,
-                });
-            } else if (!res.ok) throw new InvalidResponseError(res.status, res.statusText);
-        })
-        .then((data) => {
-            if (typeof data === "string") return data as string;
-            else return data.token as string;
-        });
+            if (!captchaResponse.solved) throw new CaptchaRequiredError(captchaResponse.id);
+            return getAccountToken(email, password, installationID, {
+                autoCaptcha: false,
+                challengeId: captchaResponse.id,
+            });
+        } else {
+            throw new InvalidResponseError(res.status, res.statusText);
+        }
+    });
 };

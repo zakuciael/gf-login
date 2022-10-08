@@ -3,6 +3,10 @@ import fetch from "node-fetch";
 import { BlackBox } from "./../utils/BlackBox";
 import { Identity } from "./../utils/Identity";
 
+interface IApiResponse {
+    status: string;
+}
+
 const browser_user_agent =
     "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36";
 /**
@@ -39,7 +43,7 @@ export const sendIovation = async (
         if (!res.ok) {
             return false;
         }
-        const data = await res.json();
+        const data = (await res.json()) as IApiResponse;
         if (data.status != "ok") {
             return false;
         }

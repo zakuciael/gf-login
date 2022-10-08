@@ -6,6 +6,10 @@ import fetch from "node-fetch";
 import { BlackBox } from "../utils/BlackBox";
 import { Identity } from "../utils/Identity";
 
+interface IApiResponse {
+    code: string;
+}
+
 /**
  * Authenticate to the game using Gameforge account
  * @public
@@ -50,7 +54,7 @@ export const getGameToken = async (
         }),
     })
         .then((res) => {
-            if (res.ok) return res.json();
+            if (res.ok) return res.json() as Promise<IApiResponse>;
             else if (res.status === 403) throw new ForbiddenError();
             else if (res.status === 401) throw new UnauthorizedError();
             else throw new InvalidResponseError(res.status, res.statusText);
