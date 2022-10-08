@@ -2,7 +2,6 @@ import type { GameAccount } from "../../types";
 import fetch from "node-fetch";
 import { BlackBox } from "./../utils/BlackBox";
 import { Identity } from "./../utils/Identity";
-import { randomIntFromRange } from "./../utils/strings";
 
 const browser_user_agent =
     "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36";

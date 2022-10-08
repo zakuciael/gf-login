@@ -10,7 +10,6 @@ import { getGameforgeClientVersion } from "./utils/getGameforgeClientVersion";
 import { sendGameStartedEvent } from "./GfAccount/sendGameStartedEvent";
 import { BlackBox } from "./utils/BlackBox";
 import { getGameToken } from "./GfAccount/getGameToken";
-import { randomIntFromRange } from "./utils/strings";
 import { sendIovation } from "./GfAccount/sendIovation";
 
 /**
