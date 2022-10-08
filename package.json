@@ -21,7 +21,6 @@
   ],
   "scripts": {
     "start": "ts-node src/index.ts",
-    "dev": "ts-node example/_login_to_game.ts",
     "build": "yarn build:source && yarn build:declarations",
     "build:source": "rimraf dist/ && tsc -p tsconfig.json",
     "build:declarations": "rimraf declarations/ && tsc -p tsconfig.json --declaration --declarationMap --declarationDir declarations/ && api-extractor run",

@@ -91,8 +91,7 @@ export const getAccountToken = (
                     options.maxCaptchaAttempts
                 );
 
-                if (!captchaResponse.solved)
-                    throw new CaptchaRequiredError(captchaResponse.id);
+                if (!captchaResponse.solved) throw new CaptchaRequiredError(captchaResponse.id);
                 return getAccountToken(email, password, installationID, {
                     autoCaptcha: false,
                     challengeId: captchaResponse.id,

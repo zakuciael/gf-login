@@ -3,11 +3,17 @@
  * TODO: Add more
  * @public
  */
-export type GfLocale = "pl_PL" | "en_UK";
+export enum GfLocale {
+    pl_PL = "pl_PL",
+    en_UK = "en_UK",
+}
 
 /**
  * Availble Gameforge languages
  * TODO: Add more
  * @public
  */
-export type GfLang = "pl" | "en";
+export enum GfLang {
+    pl = "pl",
+    en = "en",
+}

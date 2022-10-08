@@ -2,7 +2,7 @@ import { IFingerprint, IFingerprintRequest } from "../../types";
 import dateFormat from "dateformat";
 import fetch from "node-fetch";
 import { Base64 } from "./Base64";
-import { randomIntFromInterval, randomString } from "./strings";
+import { randomIntFromRange, randomString } from "./strings";
 import { fixFingerprintDataTypes } from "./fixFingerprintDataTypes";
 
 const SERVER_FILE_GAME1_FILE = "https://gameforge.com/tra/game1.js";
@@ -37,16 +37,16 @@ export class Fingerprint {
     }
 
     updateTimings(): void {
-        this.fingerprint.dP = randomIntFromInterval(0, 50 - 1);
-        this.fingerprint.dF = randomIntFromInterval(0, 50 - 1);
-        this.fingerprint.dW = randomIntFromInterval(0, 50 - 1);
-        this.fingerprint.dC = randomIntFromInterval(0, 50 - 1);
+        this.fingerprint.dP = randomIntFromRange(0, 50 - 1);
+        this.fingerprint.dF = randomIntFromRange(0, 50 - 1);
+        this.fingerprint.dW = randomIntFromRange(0, 50 - 1);
+        this.fingerprint.dC = randomIntFromRange(0, 50 - 1);
         this.fingerprint.d =
             this.fingerprint.dP +
             this.fingerprint.dF +
             this.fingerprint.dW +
             this.fingerprint.dC +
-            randomIntFromInterval(0, 10 - 1);
+            randomIntFromRange(0, 10 - 1);
     }
 
     updateCreation(): void {

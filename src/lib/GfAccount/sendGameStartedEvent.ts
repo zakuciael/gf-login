@@ -13,20 +13,17 @@ import fetch from "node-fetch";
  * @param certificateStore - The certificate store loaded with Gameforge's certificate
  * @return Generated session id
  */
-export const sendGameStartedEvent = (
+export const sendGameStartedEvent = async (
     installationId: string,
     gameAccount: GameAccount,
     clientVersion: GameforgeClientVersion,
     certificateStore: CertificateStore,
     sessionId: string
-): Promise<string> => {
-    return fetch(`https://events2.gameforge.com/`, {
+): Promise<void> => {
+    await fetch(`https://events2.gameforge.com/`, {
         method: "POST",
         agent: certificateStore.agent,
-        /*agent: new Agent({
-            pfx: certificateStore.fullCert,
-            passphrase: certificateStore.password,
-        }),*/
+
         headers: {
             "Content-Type": "application/json",
             "User-Agent": `GameforgeClient/${clientVersion.version
@@ -51,5 +48,5 @@ export const sendGameStartedEvent = (
             start_option: "default_en-GB", // default_pl-PL
             type: "game_started",
         }),
-    }).then(() => sessionId);
+    });
 };

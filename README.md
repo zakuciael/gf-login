@@ -28,8 +28,10 @@ pnpm add @zakku/gf-login
 import {
     CertificateStore,
     Identity,
-    GfAccount,
+    GameforgeAPI,
     convertNostaleToken,
+    GfLang,
+    GfLocale,
 } from "@zakku/gf-login";
 
 const email = "gf-login@gameforge.sucks.af";
@@ -40,22 +42,22 @@ const installationId = "8cd369b7-3f73-47c4-bf57-3544201ec275";
 // Identity.generateIdentity("./certs/identity.json");
 const identity = new Identity("./identity.json");
 
-// const certStore = CertificateStore.create("./cert.p12", "secret_gf_cert_password");
-const certStore = CertificateStore.createFromPem("./all_certs.pem");
+const certStore = CertificateStore.create("./cert.p12", "secret_gf_cert_password");
+// const certStore = CertificateStore.createFromPem("./all_certs.pem");
 
-const a = new GfAccount({
-    locale: "pl_PL",
-    gfLang: "pl",
+const acc = new GameforgeAPI({
+    locale: GfLocale.pl_PL,
+    gfLang: GfLang.pl,
     installationId: installationId,
     identity: identity,
     certStore: certStore,
 });
-await a.authenthicate(email, password);
+await acc.authenthicate(email, password);
 
-const accList = await a.getAccounts();
+const accList = await acc.getGameAccounts();
 console.dir(accList);
 
-const gameToken = await a.getToken(accList[0]);
+const gameToken = await acc.getGameToken(accList[0]);
 console.log(gameToken);
 
 const loginSession = convertNostaleToken(gameToken);

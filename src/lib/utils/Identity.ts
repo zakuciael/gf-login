@@ -6,7 +6,7 @@ import { IFingerprint, IFingerprintRequest } from "../../types";
 import { Base64 } from "./Base64";
 import { sha256 } from "./crypto";
 import { Fingerprint } from "./Fingerprint";
-import { randomIntFromInterval, randomString, randomString2 } from "./strings";
+import { randomIntFromRange, randomString } from "./strings";
 
 /**
  * Used to load Fingerprint
@@ -89,15 +89,15 @@ export class Identity {
             audio: sha256(randomStr()),
             media: sha256(randomStr()),
             permissions: sha256(randomStr()),
-            audioFP: randomIntFromInterval(100, 500) + Math.random(),
+            audioFP: randomIntFromRange(100, 500) + Math.random(),
             webglFP: sha256(randomStr()),
-            canvasFP: randomIntFromInterval(1000000000, 9999999999),
-            dP: randomIntFromInterval(1, 50),
-            dF: randomIntFromInterval(1, 50),
-            dW: randomIntFromInterval(1, 50),
-            dC: randomIntFromInterval(1, 50),
+            canvasFP: randomIntFromRange(1000000000, 9999999999),
+            dP: randomIntFromRange(1, 50),
+            dF: randomIntFromRange(1, 50),
+            dW: randomIntFromRange(1, 50),
+            dC: randomIntFromRange(1, 50),
             creation: dateFormat(new Date(), "UTC:yyyy-mm-dd'T'HH:MM:ss'.'l'Z'"),
-            uuid: randomString2(27).toLowerCase(),
+            uuid: randomString(27).toLowerCase(),
             d: 427,
             osVersion: "10",
             vector: vector,

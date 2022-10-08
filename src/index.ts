@@ -4,7 +4,7 @@ export { CertificateStore } from "./lib/utils/CertificateStore";
 export { BlackBox } from "./lib/utils/BlackBox";
 export { Fingerprint } from "./lib/utils/Fingerprint";
 export { Identity } from "./lib/utils/Identity";
-export { GfAccount } from "./lib/GfAccount";
+export { GameforgeAPI } from "./lib/GameforgeAPI";
 export * from "./lib/errors";
 export * from "./lib/tokens";
 export * from "./types";

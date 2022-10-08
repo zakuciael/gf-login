@@ -10,14 +10,15 @@ import { getGameforgeClientVersion } from "./utils/getGameforgeClientVersion";
 import { sendGameStartedEvent } from "./GfAccount/sendGameStartedEvent";
 import { BlackBox } from "./utils/BlackBox";
 import { getGameToken } from "./GfAccount/getGameToken";
-import { randomIntFromInterval } from "./utils/strings";
+import { randomIntFromRange } from "./utils/strings";
+import { sendIovation } from "./GfAccount/sendIovation";
 
 /**
  * Gameforge account class used to talk with API.
  *
  * @public
  */
-export class GfAccount {
+export class GameforgeAPI {
     locale: GfLocale;
     gfLang: GfLang;
     installationId: string;
@@ -60,14 +61,14 @@ export class GfAccount {
         }
     }
 
-    async getAccounts(): Promise<GameAccount[]> {
+    async getGameAccounts(): Promise<GameAccount[]> {
         if (this.authToken == null) {
             throw new UnauthorizedError();
         }
         return getGameAccounts(this.authToken, this.installationId);
     }
 
-    async getToken(gameaccount: GameAccount): Promise<string> {
+    async getGameToken(gameaccount: GameAccount): Promise<string> {
         if (this.authToken == null) {
             throw new UnauthorizedError();
         }
@@ -84,24 +85,21 @@ export class GfAccount {
             this.gameSessionId
         );
 
-        // sendIovation (without it still works)
-        /*if (
+        const blackbox = new BlackBox(gameaccount.id, this.gameSessionId, this.installationId);
+
+        // sendIovation
+        if (
             (await sendIovation(
                 this.authToken,
                 this.installationId,
                 gameaccount,
-                this.gameSessionId,
+                blackbox,
                 this.identity
             )) == false
         ) {
             throw new Error("sendIovation fail");
-        }*/
+        }
 
-        const blackbox = new BlackBox(
-            gameaccount.id,
-            `${this.gameSessionId}-${randomIntFromInterval(1000, 9999)}`,
-            this.installationId
-        );
         return getGameToken(
             this.authToken,
             gameaccount,

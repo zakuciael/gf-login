@@ -6,7 +6,7 @@ import { Base64 } from "./Base64";
 import { fixFingerprintDataTypes } from "./fixFingerprintDataTypes";
 import { Identity } from "./Identity";
 import { sha512 } from "./sha512";
-import { randomIntFromInterval } from "./strings";
+import { randomIntFromRange } from "./strings";
 
 function toPercentEncoding(str: string, exclude: string): string {
     return str
@@ -31,13 +31,13 @@ export class BlackBox {
     installationId: string;
     key: string;
 
-    constructor(accountId: string, gsid: string, installationId: string) {
+    constructor(accountId: string, gameSessionId: string, installationId: string) {
         this.accountId = accountId;
-        this.gsid = gsid;
+        this.gsid = `${gameSessionId}-${randomIntFromRange(1000, 9999)}`;
         this.installationId = installationId;
 
         // generate key
-        this.key = sha512(`${gsid}-${accountId}`);
+        this.key = sha512(`${this.gsid}-${accountId}`);
     }
 
     public encrypted(identity: Identity): string {
@@ -99,7 +99,7 @@ export class BlackBox {
     private createRequest(): IFingerprintRequest {
         const gsidSplited = this.gsid.split("-");
         const x = {
-            features: [randomIntFromInterval(1, 2 ** 32)],
+            features: [randomIntFromRange(1, 2 ** 32)],
             installation: this.installationId,
             session: gsidSplited[gsidSplited.length - 1],
         };
