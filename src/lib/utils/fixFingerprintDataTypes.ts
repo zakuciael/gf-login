@@ -9,10 +9,8 @@ export function fixFingerprintDataTypes(fingerprint: IFingerprint): IFingerprint
         if (value == null || value == "null") {
             newFp[key] = null;
         } else if (fingerprintNoQuotes.includes(key) && value.toLowerCase !== undefined) {
-            if (value.toLowerCase() == "false") {
-                newFp[key] = false;
-            } else if (value.toLowerCase() == "true") {
-                newFp[key] = true;
+            if (["true", "false"].includes(value.toLowerCase())) {
+                newFp[key] = value.toLowerCase() === "true";
             } else if (value.includes(".")) {
                 newFp[key] = parseFloat(value);
             } else {
