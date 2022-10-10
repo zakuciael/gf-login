@@ -4,7 +4,7 @@ import {
     GameforgeAPI,
     GfLang,
     GfLocale,
-    Identity,
+    Fingerprint,
 } from "../src/index";
 
 const email = "gf-login@gameforge.sucks.af";
@@ -12,7 +12,7 @@ const password = "gfpls";
 const installationId = "8cd369b7-3f73-47c4-bf57-3544201ec275";
 
 async function main() {
-    const identity = new Identity("./identity.json");
+    const fingerprint = Fingerprint.fromFile("./identity.json");
 
     const certStore = CertificateStore.create("./cert.p12", "secret_gf_cert_password");
     // const certStore = CertificateStore.createFromPem("./all_certs.pem");
@@ -21,7 +21,7 @@ async function main() {
         locale: GfLocale.pl_PL,
         gfLang: GfLang.pl,
         installationId: installationId,
-        identity: identity,
+        fingerprint: fingerprint,
         certStore: certStore,
     });
     await acc.authenthicate(email, password);

@@ -4,7 +4,7 @@ import { createAccountHash } from "./../utils/createAccountHash";
 import { CertificateStore } from "./../utils/CertificateStore";
 import fetch from "node-fetch";
 import { BlackBox } from "../utils/BlackBox";
-import { Identity } from "../utils/Identity";
+import { Fingerprint } from "../utils/Fingerprint";
 
 interface IApiResponse {
     code: string;
@@ -19,7 +19,7 @@ interface IApiResponse {
  * @param clientVersion - The Gameforge Client version information
  * @param certificateStore - The certificate store loaded with Gameforge's certificate
  * @param blackbox - Blackbox
- * @param identity - Identity
+ * @param fingerprint - Fingerprint
  * @return The game token
  */
 export const getGameToken = async (
@@ -29,7 +29,7 @@ export const getGameToken = async (
     clientVersion: GameforgeClientVersion,
     certificateStore: CertificateStore,
     blackbox: BlackBox,
-    identity: Identity
+    fingerprint: Fingerprint
 ): Promise<string> => {
     return fetch(`https://spark.gameforge.com/api/v1/auth/thin/codes`, {
         method: "POST",
@@ -48,7 +48,7 @@ export const getGameToken = async (
         },
         body: JSON.stringify({
             platformGameAccountId: gameAccount.id,
-            blackbox: blackbox.encrypted(identity),
+            blackbox: blackbox.encrypted(fingerprint),
             gsid: blackbox.gsid,
             gameid: gameAccount.game.id,
         }),

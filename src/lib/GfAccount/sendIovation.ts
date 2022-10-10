@@ -1,7 +1,7 @@
 import type { GameAccount } from "../../types";
 import fetch from "node-fetch";
 import { BlackBox } from "./../utils/BlackBox";
-import { Identity } from "./../utils/Identity";
+import { Fingerprint } from "../utils/Fingerprint";
 
 interface IApiResponse {
     status: string;
@@ -16,14 +16,14 @@ const browser_user_agent =
  * @param installationId - The installation id
  * @param gameAccount - Your Game account (gameforge sub account)
  * @param blackbox - Your Blackbox
- * @param identity - Your Identity
+ * @param fingerprint - Your Fingerprint
  */
 export const sendIovation = async (
     authToken: string,
     installationId: string,
     gameAccount: GameAccount,
     blackbox: BlackBox,
-    identity: Identity
+    fingerprint: Fingerprint
 ): Promise<boolean> => {
     return fetch("https://spark.gameforge.com/api/v1/auth/iovation", {
         method: "POST",
@@ -36,7 +36,7 @@ export const sendIovation = async (
         },
         body: JSON.stringify({
             accountId: gameAccount.id,
-            blackbox: blackbox.fingerprintToEncodedBlackbox(identity.fingerprint),
+            blackbox: blackbox.fingerprintToEncodedBlackbox(fingerprint.fingerprint),
             type: "play_now",
         }),
     }).then(async (res) => {

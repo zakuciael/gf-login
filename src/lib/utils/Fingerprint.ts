@@ -4,6 +4,9 @@ import fetch from "node-fetch";
 import { Base64 } from "./Base64";
 import { randomIntFromRange, randomString } from "./strings";
 import { fixFingerprintDataTypes } from "./fixFingerprintDataTypes";
+import { resolve as pathResolve, normalize as pathNormalize } from "path";
+import untildify from "untildify";
+import { readFileSync } from "fs";
 
 const SERVER_FILE_GAME1_FILE = "https://gameforge.com/tra/game1.js";
 
@@ -27,6 +30,17 @@ export class Fingerprint {
         this.fingerprint = fp;
         this.fingerprint.request = null;
         this.fingerprint = fixFingerprintDataTypes(this.fingerprint);
+    }
+
+    public static fromFile(filePath: string): Fingerprint {
+        const filepath = pathResolve(untildify(pathNormalize(filePath)));
+
+        // load fingerprint from file
+        const txt = readFileSync(filepath).toString();
+        const fpdata = JSON.parse(txt);
+        const _fingerprint = new Fingerprint(fpdata);
+        _fingerprint.shuffle();
+        return _fingerprint;
     }
 
     async shuffle(): Promise<void> {

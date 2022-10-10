@@ -1,9 +1,9 @@
+export { generateRandomFingerprint } from "./lib/utils/generateRandomFingerprint";
 export { getGameforgeClientVersion } from "./lib/utils/getGameforgeClientVersion";
 export { createAccountHash } from "./lib/utils/createAccountHash";
 export { CertificateStore } from "./lib/utils/CertificateStore";
 export { BlackBox } from "./lib/utils/BlackBox";
 export { Fingerprint } from "./lib/utils/Fingerprint";
-export { Identity } from "./lib/utils/Identity";
 export { GameforgeAPI } from "./lib/GameforgeAPI";
 export * from "./lib/errors";
 export * from "./lib/tokens";

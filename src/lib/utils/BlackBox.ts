@@ -3,8 +3,8 @@ import { IFingerprint } from "../../types";
 import { BLACKBOX_FIELDS } from "../../types/Blackbox";
 import { IFingerprintRequest } from "../../types/Fingerprint";
 import { Base64 } from "./Base64";
+import { Fingerprint } from "./Fingerprint";
 import { fixFingerprintDataTypes } from "./fixFingerprintDataTypes";
-import { Identity } from "./Identity";
 import { sha512 } from "./sha512";
 import { randomIntFromRange } from "./strings";
 
@@ -40,9 +40,9 @@ export class BlackBox {
         this.key = sha512(`${this.gsid}-${accountId}`);
     }
 
-    public encrypted(identity: Identity): string {
-        identity.setRequest(this.createRequest());
-        const blackbox = this.fingerprintToEncodedBlackbox(identity.fingerprint);
+    public encrypted(fingerprint: Fingerprint): string {
+        fingerprint.setRequest(this.createRequest());
+        const blackbox = this.fingerprintToEncodedBlackbox(fingerprint.fingerprint);
 
         const encryptedBlackbox = this.encrypt(blackbox);
         return Base64.encode(encryptedBlackbox);

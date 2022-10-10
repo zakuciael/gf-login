@@ -1,7 +1,6 @@
 import { GameAccount, GameforgeClientVersion } from "../types";
 import { UnauthorizedError } from "./errors";
 import { CertificateStore } from "./utils/CertificateStore";
-import { Identity } from "./utils/Identity";
 import { v4 as uuid } from "uuid";
 import { GfLang, GfLocale } from "../types/GfLocale";
 import { getAccountToken } from "./GfAccount/getAccountToken";
@@ -11,6 +10,7 @@ import { sendGameStartedEvent } from "./GfAccount/sendGameStartedEvent";
 import { BlackBox } from "./utils/BlackBox";
 import { getGameToken } from "./GfAccount/getGameToken";
 import { sendIovation } from "./GfAccount/sendIovation";
+import { Fingerprint } from "./utils/Fingerprint";
 
 /**
  * Gameforge account class used to talk with API.
@@ -22,7 +22,7 @@ export class GameforgeAPI {
     gfLang: GfLang;
     installationId: string;
     authToken: string | null = null;
-    identity: Identity;
+    fingerprint: Fingerprint;
     gameSessionId: string;
     clientVersion: GameforgeClientVersion | undefined = undefined;
     certStore: CertificateStore;
@@ -31,20 +31,20 @@ export class GameforgeAPI {
         locale,
         gfLang,
         installationId,
-        identity,
+        fingerprint,
         certStore,
     }: {
         locale: GfLocale;
         gfLang: GfLang;
         installationId: string;
-        identity: Identity;
+        fingerprint: Fingerprint;
         certStore: CertificateStore;
     }) {
         this.locale = locale;
         this.gfLang = gfLang;
         this.installationId = installationId;
 
-        this.identity = identity;
+        this.fingerprint = fingerprint;
         this.certStore = certStore;
 
         this.gameSessionId = uuid();
@@ -93,7 +93,7 @@ export class GameforgeAPI {
                 this.installationId,
                 gameaccount,
                 blackbox,
-                this.identity
+                this.fingerprint
             )) == false
         ) {
             throw new Error("sendIovation fail");
@@ -106,7 +106,7 @@ export class GameforgeAPI {
             this.clientVersion,
             this.certStore,
             blackbox,
-            this.identity
+            this.fingerprint
         );
     }
 }
