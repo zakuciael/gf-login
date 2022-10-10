@@ -11,6 +11,7 @@ import { BlackBox } from "./utils/BlackBox";
 import { getGameToken } from "./GfAccount/getGameToken";
 import { sendIovation } from "./GfAccount/sendIovation";
 import { Fingerprint } from "./utils/Fingerprint";
+import { sendStartTimeEvent } from "./GfAccount/sendStartTimeEvent";
 
 /**
  * Gameforge account class used to talk with API.
@@ -51,6 +52,15 @@ export class GameforgeAPI {
     }
 
     async authenthicate(email: string, password: string): Promise<boolean> {
+        if (this.clientVersion == null) {
+            this.clientVersion = (await getGameforgeClientVersion()) as GameforgeClientVersion;
+        }
+        await sendStartTimeEvent(
+            this.installationId,
+            this.clientVersion,
+            this.certStore,
+            this.gameSessionId
+        );
         try {
             this.authToken = await getAccountToken(email, password, this.installationId);
             return true;

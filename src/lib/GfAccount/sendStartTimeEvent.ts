@@ -1,28 +1,25 @@
-import { GameAccount, GameforgeClientVersion } from "../../types";
 import { CertificateStore } from "./../utils/CertificateStore";
+import type { GameforgeClientVersion } from "../../types";
 import dateFormat from "dateformat";
 import fetch from "node-fetch";
 
 /**
- * Sends a dummy "game started" event to the API
+ * Sends a dummy "start time" event to the API
  * @public
  * @param installationId - The installation id
- * @param gameAccount - The game account object
- * @param clientVersion- The Gameforge Client version information
+ * @param clientVersion - The Gameforge Client version information
  * @param certificateStore - The certificate store loaded with Gameforge's certificate
  * @param gameSessionId - UUID generated on start
  */
-export const sendGameStartedEvent = async (
+export const sendStartTimeEvent = async (
     installationId: string,
-    gameAccount: GameAccount,
     clientVersion: GameforgeClientVersion,
     certificateStore: CertificateStore,
     gameSessionId: string
 ): Promise<void> => {
-    await fetch(`https://events2.gameforge.com/`, {
+    await fetch(`https://events.gameforge.com/`, {
         method: "POST",
         agent: certificateStore.agent,
-
         headers: {
             "Content-Type": "application/json",
             "User-Agent": `GameforgeClient/${clientVersion.version
@@ -32,20 +29,18 @@ export const sendGameStartedEvent = async (
         },
         body: JSON.stringify({
             client_installation_id: installationId,
-            client_locale: "usa_eng", // pol_pol
+            client_locale: "usa_eng",
             client_session_id: gameSessionId,
             client_version_info: {
                 branch: clientVersion.branch,
-                commit_id: clientVersion.commitId, // python version have here "d7a4e7bb)"
+                commit_id: clientVersion.commitId,
                 version: clientVersion.version,
             },
-            id: 1,
+            id: 0,
             localtime: dateFormat(new Date(), "isoDateTime"),
-            game_account_id: gameAccount.id,
-            game_id: gameAccount.game.id,
-            session_id: gameSessionId,
-            start_option: "default_en-GB", // default_pl-PL
-            type: "game_started",
+            start_count: 1,
+            start_time: 7000,
+            type: "start_time",
         }),
     });
 };
