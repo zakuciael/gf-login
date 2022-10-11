@@ -7,6 +7,7 @@ import { fixFingerprintDataTypes } from "./fixFingerprintDataTypes";
 import { resolve as pathResolve, normalize as pathNormalize } from "path";
 import untildify from "untildify";
 import { readFileSync } from "fs";
+import { FingerprintSchema } from "../schema/fingerprintSchema";
 
 const SERVER_FILE_GAME1_FILE = "https://gameforge.com/tra/game1.js";
 
@@ -38,6 +39,7 @@ export class Fingerprint {
         // load fingerprint from file
         const txt = readFileSync(filepath).toString();
         const fpdata = JSON.parse(txt);
+        FingerprintSchema.parse(fpdata);
         const _fingerprint = new Fingerprint(fpdata);
         _fingerprint.shuffle();
         return _fingerprint;
