@@ -1,4 +1,3 @@
-import { escape } from "querystring";
 import { IFingerprint } from "../../types";
 import { BLACKBOX_FIELDS } from "../../types/Blackbox";
 import { IFingerprintRequest } from "../../types/Fingerprint";
@@ -15,7 +14,7 @@ function toPercentEncoding(str: string, exclude: string): string {
             if (exclude.includes(v)) {
                 return v;
             }
-            return escape(v);
+            return encodeURIComponent(v);
         })
         .join("");
 }
