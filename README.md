@@ -22,7 +22,7 @@ yarn add @zakku/gf-login
 pnpm add @zakku/gf-login
 ```
 
-## Example Usage
+## Examples
 
 check folder `example`
 
