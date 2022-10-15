@@ -24,7 +24,7 @@ pnpm add @zakku/gf-login
 
 ## Examples
 
-check folder `example`
+Please see [full example here](https://github.com/zakuciael/gf-login/blob/master/example/login_to_game.ts).
 
 ## Credits
 
