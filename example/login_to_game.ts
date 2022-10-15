@@ -24,7 +24,7 @@ async function main() {
         fingerprint: fingerprint,
         certStore: certStore,
     });
-    await acc.authenthicate(email, password);
+    await api.authenthicate(email, password);
 
     const accList = await acc.getGameAccounts();
     console.dir(accList);
