@@ -52,9 +52,8 @@ export class GameforgeAPI {
     }
 
     async authenthicate(email: string, password: string): Promise<boolean> {
-        if (this.clientVersion == null) {
-            this.clientVersion = (await getGameforgeClientVersion()) as GameforgeClientVersion;
-        }
+	this.clientVersion = this.clientVersion ?? (await getGameforgeClientVersion())!;
+
         await sendStartTimeEvent(
             this.installationId,
             this.clientVersion,
