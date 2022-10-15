@@ -17,7 +17,7 @@ async function main() {
     const certStore = CertificateStore.create("./cert.p12", "secret_gf_cert_password");
     // const certStore = CertificateStore.createFromPem("./all_certs.pem");
 
-    const acc = new GameforgeAPI({
+    const api = new GameforgeAPI({
         locale: GfLocale.pl_PL,
         gfLang: GfLang.pl,
         installationId: installationId,
