@@ -26,7 +26,7 @@ async function main() {
     });
     await api.authenthicate(email, password);
 
-    const accList = await acc.getGameAccounts();
+    const accList = await api.getGameAccounts();
     console.dir(accList);
 
     const gameToken = await acc.getGameToken(accList[0]);
