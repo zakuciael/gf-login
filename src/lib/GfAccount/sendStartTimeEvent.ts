@@ -1,9 +1,7 @@
-import { CertificateStore } from "./utils/CertificateStore";
-import type { GameforgeClientVersion } from "../types";
+import { CertificateStore } from "./../utils/CertificateStore";
+import type { GameforgeClientVersion } from "../../types";
 import dateFormat from "dateformat";
-import { v4 as uuid } from "uuid";
 import fetch from "node-fetch";
-import { Agent } from "https";
 
 /**
  * Sends a dummy "start time" event to the API
@@ -11,18 +9,17 @@ import { Agent } from "https";
  * @param installationId - The installation id
  * @param clientVersion - The Gameforge Client version information
  * @param certificateStore - The certificate store loaded with Gameforge's certificate
+ * @param gameSessionId - UUID generated on start
  */
-export const sendStartTimeEvent = (
+export const sendStartTimeEvent = async (
     installationId: string,
     clientVersion: GameforgeClientVersion,
-    certificateStore: CertificateStore
+    certificateStore: CertificateStore,
+    gameSessionId: string
 ): Promise<void> => {
-    return fetch(`https://events2.gameforge.com/`, {
+    await fetch(`https://events.gameforge.com/`, {
         method: "POST",
-        agent: new Agent({
-            pfx: certificateStore.fullCert,
-            passphrase: certificateStore.password,
-        }),
+        agent: certificateStore.agent,
         headers: {
             "Content-Type": "application/json",
             "User-Agent": `GameforgeClient/${clientVersion.version
@@ -33,17 +30,17 @@ export const sendStartTimeEvent = (
         body: JSON.stringify({
             client_installation_id: installationId,
             client_locale: "usa_eng",
-            client_session_id: uuid(),
+            client_session_id: gameSessionId,
             client_version_info: {
                 branch: clientVersion.branch,
                 commit_id: clientVersion.commitId,
                 version: clientVersion.version,
             },
-            id: 1,
+            id: 0,
             localtime: dateFormat(new Date(), "isoDateTime"),
             start_count: 1,
             start_time: 7000,
             type: "start_time",
         }),
-    }).then(() => undefined);
+    });
 };

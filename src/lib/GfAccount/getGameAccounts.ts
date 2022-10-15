@@ -1,5 +1,5 @@
-import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./errors";
-import type { GameAccount } from "../types";
+import { ForbiddenError, InvalidResponseError, UnauthorizedError } from "./../errors";
+import type { GameAccount } from "../../types";
 import fetch from "node-fetch";
 
 interface RawGameAccount {
@@ -17,7 +17,13 @@ interface RawGameAccount {
     lastLogin: string | null; // Date
     accountNumericId: number;
     guls: { game: string; server: string; user: string; lang: string };
-    wallet: { currencies: { amount: number; currencyId: string; locaKey: string }[] };
+    wallet: {
+        currencies: { amount: number; currencyId: string; locaKey: string }[];
+    };
+}
+
+interface IAccountsResponse {
+    [key: string]: RawGameAccount;
 }
 
 /**
@@ -39,12 +45,12 @@ export const getGameAccounts = (
         },
     })
         .then((res) => {
-            if (res.ok) return res.json();
+            if (res.ok) return res.json() as Promise<IAccountsResponse>;
             else if (res.status === 401) throw new UnauthorizedError();
             else if (res.status === 403) throw new ForbiddenError();
             else throw new InvalidResponseError(res.status, res.statusText);
         })
-        .then((data: { [key: string]: RawGameAccount }) =>
+        .then((data: IAccountsResponse) =>
             Object.values(data).map((acc) => ({
                 id: acc.id,
                 accountName: acc.displayName,

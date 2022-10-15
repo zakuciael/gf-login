@@ -25,4 +25,8 @@ certs/
 !.idea/copyright/
 !.vscode/tasks.json
 !.vscode/launch.json
+!.vscode/settings.json
 !.run/
+
+# hide my private examples
+example/_*
