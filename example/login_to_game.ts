@@ -29,7 +29,7 @@ async function main() {
     const accList = await api.getGameAccounts();
     console.dir(accList);
 
-    const gameToken = await acc.getGameToken(accList[0]);
+    const gameToken = await api.getGameToken(accList[0]);
     console.log(gameToken);
 
     const loginSession = convertNostaleToken(gameToken);
