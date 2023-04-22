@@ -4,10 +4,10 @@ module.exports = {
         ecmaVersion: 2019,
         sourceType: "module",
     },
+    plugins: ["prettier", "@typescript-eslint"],
     extends: [
         "plugin:@typescript-eslint/recommended",
-        "prettier/@typescript-eslint",
-        "plugin:prettier/recommended",
+        "plugin:prettier/recommended"
     ],
     rules: {},
 };
