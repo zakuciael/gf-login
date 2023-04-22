@@ -48,10 +48,11 @@ export const getGameToken = async (
         }),
     })
         .then((res) => {
-            if (res.ok) return res.json();
+            if (res.ok) return res.json() as Promise<{ code: string }>;
             else if (res.status === 403) throw new ForbiddenError();
             else if (res.status === 401) throw new UnauthorizedError();
-            else throw new InvalidResponseError(res.status, res.statusText);
+
+            throw new InvalidResponseError(res.status, res.statusText);
         })
-        .then((data: { code: string }) => data.code);
+        .then((data) => data.code);
 };

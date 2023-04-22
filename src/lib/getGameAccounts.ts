@@ -39,12 +39,13 @@ export const getGameAccounts = (
         },
     })
         .then((res) => {
-            if (res.ok) return res.json();
+            if (res.ok) return res.json() as Promise<{ [key: string]: RawGameAccount }>;
             else if (res.status === 401) throw new UnauthorizedError();
             else if (res.status === 403) throw new ForbiddenError();
-            else throw new InvalidResponseError(res.status, res.statusText);
+
+            throw new InvalidResponseError(res.status, res.statusText);
         })
-        .then((data: { [key: string]: RawGameAccount }) =>
+        .then((data) =>
             Object.values(data).map((acc) => ({
                 id: acc.id,
                 accountName: acc.displayName,

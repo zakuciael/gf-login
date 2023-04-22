@@ -77,7 +77,7 @@ export const getAccountToken = (
         .then(async (res) => {
             const challengeIdHeader = res.headers.get("gf-challenge-id");
 
-            if (res.ok) return res.json();
+            if (res.ok) return res.json() as Promise<{ token: string }>;
             else if (res.status === 403) throw new ForbiddenError();
             else if (res.status === 409 && challengeIdHeader) {
                 const challengeId = challengeIdHeader.split(";")[0];
@@ -94,10 +94,9 @@ export const getAccountToken = (
                     autoCaptcha: false,
                     challengeId: captchaResponse.id,
                 });
-            } else if (!res.ok) throw new InvalidResponseError(res.status, res.statusText);
+            }
+
+            throw new InvalidResponseError(res.status, res.statusText);
         })
-        .then((data) => {
-            if (typeof data === "string") return data as string;
-            else return data.token as string;
-        });
+        .then((data) => typeof data === "string" ? data : data.token);
 };
