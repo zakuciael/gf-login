@@ -98,5 +98,5 @@ export const getAccountToken = (
 
             throw new InvalidResponseError(res.status, res.statusText);
         })
-        .then((data) => typeof data === "string" ? data : data.token);
+        .then((data) => (typeof data === "string" ? data : data.token));
 };
