@@ -2,6 +2,10 @@
 
 A node.js library for authenticating to GameFail's servers.
 
+> [!WARNING]
+> This project is no longer actevly maintained, due to my focus being shifted into developing the **[zakuciael/nosapi](https://github.com/zakuciael/nosapi)** project.  
+> Which is planned to be a collection of Rust crates related to NosTale, including things like authentication (like this project!).
+
 ## Prerequisites
 
 For this library to work it is required to have `openssl` installed on your system.
